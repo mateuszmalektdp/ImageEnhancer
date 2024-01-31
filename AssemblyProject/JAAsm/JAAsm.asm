@@ -2,7 +2,7 @@
 
 ; Author: Mateusz Malek
 ; Silesian University of Technology 2023/24
-; Assembly Project
+; Assembly Project v1.0
 
 ; Laplacian Filter and Gaussian Blur implementation
 ; The function takes a pixel and its 8 surrounding pixels, and then uses XMM registers 
@@ -54,7 +54,7 @@ startLoop:
     call processPixel                   ;                   [- - -]
 
     mov eax, dword ptr [RCX - 4]        ; Left edge         [- - -]
-    movups xmm9, dword ptr [diag]       ; Load weight       [- - -]
+    movups xmm9, dword ptr [diag]       ; Load weight       [X - -]
     call processPixel                   ;                   [- - -]
 
     mov eax, dword ptr [RCX]            ; Center            [- - -]
@@ -87,9 +87,9 @@ startLoop:
  
     mov [R9], eax                       ; Set new pixel to empty array
 
-    add RCX, 4				            ;Increment array pointer
-    add R9, 4				            ;Increment array pointer
-    inc RDX					            ;Increment array index
+    add RCX, 4                          ;Increment array pointer
+    add R9, 4                           ;Increment array pointer
+    inc RDX                             ;Increment array index
 
     cmp RDX, RSI                        ; Check if the end of the row
     jl continueLoop                     ; If not end of the row, continue
@@ -124,9 +124,9 @@ processPixel:
     cvtsi2ss xmm3, R12d                 ; Convert blue channel to float and load to xmm0
 
                                         ; Combining channels R, G, B in xmm0
-    shufps xmm3, xmm3, 0                ; Duplicate channel R
+    shufps xmm3, xmm3, 0                ; Duplicate channel B
     shufps xmm2, xmm2, 0                ; Duplicate channel G
-    unpcklps xmm3, xmm2                 ; Combine R and G
+    unpcklps xmm3, xmm2                 ; Combine B and G
     movlhps xmm3, xmm1                  ; Add B to xmm0
 
     mulps xmm3, xmm9                    ; Multiplying by weight
@@ -167,7 +167,7 @@ startLoop:
     call processPixel                   ;                   [- - -]
 
     mov eax, dword ptr [RCX - 4]        ; Left edge         [- - -]
-    movups xmm9, dword ptr [minus]      ; Load weight       [- - -]
+    movups xmm9, dword ptr [minus]      ; Load weight       [X - -]
     call processPixel                   ;                   [- - -]
 
     mov eax, dword ptr [RCX]            ; Center            [- - -]
@@ -198,9 +198,9 @@ startLoop:
  
     mov [R9], eax                       ; Set new pixel to empty array
 
-    add RCX, 4				            ;Increment array pointer
-    add R9, 4				            ;Increment array pointer
-    inc RDX					            ;Increment array index
+    add RCX, 4                          ;Increment array pointer
+    add R9, 4                           ;Increment array pointer
+    inc RDX                             ;Increment array index
 
     cmp RDX, RSI                        ; Check if the end of the row
     jl continueLoop                     ; If not end of the row, continue
@@ -235,10 +235,10 @@ processPixel:
     cvtsi2ss xmm3, R12d                 ; Convert blue channel to float and load to xmm0
 
                                         ; Combining channels R, G, B in xmm0
-    shufps xmm3, xmm3, 0                ; Duplicate channel R
+    shufps xmm3, xmm3, 0                ; Duplicate channel B
     shufps xmm2, xmm2, 0                ; Duplicate channel G
-    unpcklps xmm3, xmm2                 ; Combine R and G
-    movlhps xmm3, xmm1                  ; Add B to xmm0
+    unpcklps xmm3, xmm2                 ; Combine B and G
+    movlhps xmm3, xmm1                  ; Add R to xmm0
 
     mulps xmm3, xmm9                    ; Multiplying by weight
     addps xmm0, xmm3                    ; Adding to xmm0
