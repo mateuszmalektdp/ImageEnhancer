@@ -1,246 +1,247 @@
 .data
 
-    corner  dd 1.0, 1.0, 1.0, 1.0
-    diag    dd 2.0, 2.0, 2.0, 2.0
-    center  dd 4.0, 4.0, 4.0, 4.0
-    divide  dd 16.0, 16.0, 16.0, 16.0
-    minus   dd -1.0, -1.0, -1.0, -1.0
-    laplace dd 8.0, 8.0, 8.0, 8.0
+; Author: Mateusz Malek
+; Silesian University of Technology 2023/24
+; Assembly Project
 
-    redMask   dd 00FF0000h
-    greenMask dd 0000FF00h
-    blueMask  dd 000000FFh
+; Laplacian Filter and Gaussian Blur implementation
+; The function takes a pixel and its 8 surrounding pixels, and then uses XMM registers 
+; to create a new pixel value by summing the RGB values through a weighted average
+; This function is avoiding the edges
+
+    corner  dd 1.0, 1.0, 1.0, 1.0       ; Weight of the corner (gauss)
+    diag    dd 2.0, 2.0, 2.0, 2.0       ; Weight of the diagonal (gauss)
+    center  dd 4.0, 4.0, 4.0, 4.0       ; Weight of the center (gauss)
+    divide  dd 16.0, 16.0, 16.0, 16.0   ; Weight of the division (gauss)
+    minus   dd -0.5, -0.5, -0.5, -0.5   ; Weight of the surrounding pixels (laplace)
+    laplace dd 5.0, 5.0, 5.0, 5.0       ; Weight of the center (laplace)
+
+    redMask   dd 00FF0000h              ; Value of the red channel
+    greenMask dd 0000FF00h              ; Value of the green channel
+    blueMask  dd 000000FFh              ; Value of the blue channel
 
 .code
 
 GaussianBlur proc
-    ; RCX - pointer to first element of the array
-    ; RDX - start idx (9, czyli drugi piksel drugiego wiersza)
-    ; R8  - end idx (54, ostatni indeks do przetworzenia)
-    ; R9  - empty array to fill
-    ; RSI - row counter
+                                        ; RCX - pointer to first element of the array
+                                        ; RDX - start of the array
+                                        ; R8  - end of the array
+                                        ; R9  - empty array to fill
+                                        ; RSI - row counter
 
-    mov RSI, 15         ; Initialize row counter (end of the second row)
+    mov RSI, 19                         ; Initialize row counter (end of the second row)
 
-    mov RBX, RDX         ; Copy start index to R8
+    mov RBX, RDX                        ; Copy start index to R8
     add RBX, RBX
-    add RBX, RBX          ; Multiply start index (R8) by 4 (to get byte offset)
-    add RCX, RBX         ; Move to section start
-    add R9, RBX         ; Move to section start
+    add RBX, RBX                        ; Multiply start index (R8) by 4 (to get byte offset)
+    add RCX, RBX                        ; Move to section start
+    add R9, RBX                         ; Move to section start
 
 startLoop: 
 
-    xorps xmm0, xmm0                ; Inicjalizacja xmm0, ktory bedzie przechowywal nowe wartosci piksela              
+    xorps xmm0, xmm0                    ; initializing xmm0 (new pixel value)              
 
-    mov eax, dword ptr [RCX - 36]    ; Lewy Górny s¹siad [X - -]
-    ;movups xmm9, dword ptr [corner] ; Za³aduj wagê 1.0  [- X -]
-    call processPixel                ;                   [- - -]
+    mov eax, dword ptr [RCX - 36]       ; Left upper edge   [X - -]
+    movups xmm9, dword ptr [corner]     ; Load weight       [- - -]
+    call processPixel                   ;                   [- - -]
 
-    mov eax, dword ptr [RCX - 32]    ; Górny s¹siad      [- X -]
-    movups xmm9, dword ptr [diag]    ; Za³aduj wagê 2.0  [- - -]
-    call processPixel                ;                   [- - -]
+    mov eax, dword ptr [RCX - 32]       ; Upper edge        [- X -]
+    movups xmm9, dword ptr [diag]       ; Load weight       [- - -]
+    call processPixel                   ;                   [- - -]
 
-    mov eax, dword ptr [RCX - 28]    ; Prawy górny s¹siad[- - X]
-    movups xmm9, dword ptr [corner]  ; Za³aduj wagê 1.0  [- - -]
-    call processPixel                ;                   [- - -]
+    mov eax, dword ptr [RCX - 28]       ; Right upper edge  [- - X]
+    movups xmm9, dword ptr [corner]     ; Load weight       [- - -]
+    call processPixel                   ;                   [- - -]
 
-    mov eax, dword ptr [RCX - 4]     ; Lewy s¹siad       [- - -]
-    movups xmm9, dword ptr [diag]    ; Za³aduj wagê 2.0  [X - -]
-    call processPixel                ;                   [- - -]
+    mov eax, dword ptr [RCX - 4]        ; Left edge         [- - -]
+    movups xmm9, dword ptr [diag]       ; Load weight       [- - -]
+    call processPixel                   ;                   [- - -]
 
-    mov eax, dword ptr [RCX]         ; Bie¿¹cy piksel    [- - -]
-    movups xmm9, dword ptr [center]  ; Za³aduj wagê 4.0  [- X -]
-    call processPixel                ;                   [- - -]
+    mov eax, dword ptr [RCX]            ; Center            [- - -]
+    movups xmm9, dword ptr [center]     ; Load weight       [- X -]
+    call processPixel                   ;                   [- - -]
 
-    mov eax, dword ptr [RCX + 4]     ; Prawy s¹siad      [- - -]
-    movups xmm9, dword ptr [diag]    ; Za³aduj wagê 2.0  [- - X]
-    call processPixel                ;                   [- - -]
+    mov eax, dword ptr [RCX + 4]        ; Right edge        [- - -]
+    movups xmm9, dword ptr [diag]       ; Load weight       [- - X]
+    call processPixel                   ;                   [- - -]
 
-    mov eax, dword ptr [RCX + 28]    ; Lewy dolny s¹siad [- - -]
-    movups xmm9, dword ptr [corner]  ; Za³aduj wagê 1.0  [- - -]
-    call processPixel                ;                   [X - -]
+    mov eax, dword ptr [RCX + 28]       ; Left lower edge   [- - -]
+    movups xmm9, dword ptr [corner]     ; Load weight       [- - -]
+    call processPixel                   ;                   [X - -]
 
-    mov eax, dword ptr [RCX + 32]    ; Dolny s¹siad      [- - -]
-    movups xmm9, dword ptr [diag]    ; Za³aduj wagê 2.0  [- - -]
-    call processPixel                ;                   [- X -]
+    mov eax, dword ptr [RCX + 32]       ; Lower edge        [- - -]
+    movups xmm9, dword ptr [diag]       ; Load weight       [- - -]
+    call processPixel                   ;                   [- X -]
 
-    mov eax, dword ptr [RCX + 36]    ; Prawy dolny s¹siad[- - -]
-    movups xmm9, dword ptr [corner]  ; Za³aduj wagê 1.0  [- - -]
-    call processPixel                ;                   [- - X]
+    mov eax, dword ptr [RCX + 36]       ; Right lower edge  [- - -]
+    movups xmm9, dword ptr [corner]     ; Load weight       [- - -]
+    call processPixel                   ;                   [- - X]
 
     divps xmm0, divide 
 
-    cvtps2dq xmm0, xmm0             ; Konwertuj zmiennoprzecinkowe wartoœci na ca³kowite
-    packusdw xmm0, xmm0             ; Pakuj wartoœci do 16-bitowych wartoœci
-    packuswb xmm0, xmm0             ; Pakuj wartoœci do 8-bitowych wartoœci
-    movd eax, xmm0                  ; Przenieœ wartoœæ do rejestru ogólnego przeznaczenia
-    and eax, 00FFFFFFh              ; Ustaw kana³ Alpha na 0x00
+    cvtps2dq xmm0, xmm0                 ; Convert float to integer
+    packusdw xmm0, xmm0                 ; Pack values to 16-bit
+    packuswb xmm0, xmm0                 ; Pack values to 8-bit
+    movd eax, xmm0                      ; Copy xmm0 to eax
+    and eax, 00FFFFFFh                  ; Set alpha channel to 0x00
  
-    mov [RCX], eax
-    mov [R9], eax                  ; Zapisz wynik do pamiêci
+    mov [R9], eax                       ; Set new pixel to empty array
 
-    add RCX, 4				;Increment array pinter
-    add R9, 4				;Increment array pinter
-    inc RDX					;Increment array index
+    add RCX, 4				            ;Increment array pointer
+    add R9, 4				            ;Increment array pointer
+    inc RDX					            ;Increment array index
 
-    cmp RDX, RSI        ; Check if the end of the row
-    jl continueLoop     ; If not end of the row, continue
+    cmp RDX, RSI                        ; Check if the end of the row
+    jl continueLoop                     ; If not end of the row, continue
 
-    ; Skip last element of the row and the first element of the next row
+                                        ; Skip last element of the row and the first element of the next row
     add RCX, 8
     add R9, 8
     add RDX, 2
 
-    ; Increment row counter to the end of the next row
-    add RSI, 8
+                                        ; Increment row counter to the end of the next row
+    add RSI, 10
 
 continueLoop:
-    cmp RDX, R8        ; Check if reached the end index
-    jl startLoop        ; If not reached, continue loop
-
-    xor rax, rax        ; Test
-    add rax, 10
+    cmp RDX, R8                         ; Check if reached the end index
+    jl startLoop                        ; If not reached, continue loop
     ret
 
 processPixel:
-                          ; Ekstrakcja kana³ów i konwersja na format zmiennoprzecinkowy
-    mov R10d, eax              ; Przekazanie piksela do rejestru R9
-    and R10d, redMask          ; Ekstrakcja kana³u czerwonego
-    shr R10d, 16               ; Przesuniecie kanalu na LSB
-    cvtsi2ss xmm1, R10d        ; Konwersja czerwonego na zmiennoprzecinkowe i za³adowanie do xmm0
+                                        ; Extracting channels and converting from int to float
+    mov R10d, eax                       ; Copying pixel to R10
+    and R10d, redMask                   ; Extracting red channel
+    shr R10d, 16                        ; Moving channel to LSB
+    cvtsi2ss xmm1, R10d                 ; Convert red channel to float and load to xmm0
 
-    mov R11d, eax             ; Przekazanie piksela do rejestru R10
-    and R11d, greenMask       ; Ekstrakcja kana³u zielonego
-    shr R11d, 8               ; Przesuniecie kanalu na LSB
-    cvtsi2ss xmm2, R11d       ; Konwersja zielonego na zmiennoprzecinkowe i za³adowanie do xmm1
+    mov R11d, eax                       ; Copying pixel to R11
+    and R11d, greenMask                 ; Extracting green channel
+    shr R11d, 8                         ; Moving channel to LSB
+    cvtsi2ss xmm2, R11d                 ; Convert green channel to float and load to xmm0
 
-    mov R12d, eax             ; Przekazanie piksela do rejestru R11
-    and R12d, blueMask        ; Ekstrakcja kana³u niebieskiego
-    cvtsi2ss xmm3, R12d       ; Konwersja niebieskiego na zmiennoprzecinkowe i za³adowanie do xmm2
+    mov R12d, eax                       ; Copying pixel to R11
+    and R12d, blueMask                  ; Extracting blue channel
+    cvtsi2ss xmm3, R12d                 ; Convert blue channel to float and load to xmm0
 
-                             ; £¹czenie kana³ów R, G, B w xmm0
-    shufps xmm3, xmm3, 0     ; Duplikacja wartoœci R
-    shufps xmm2, xmm2, 0     ; Duplikacja wartoœci G
-    unpcklps xmm3, xmm2      ; £¹czenie R i G
-    movlhps xmm3, xmm1       ; Dodanie B do xmm0
+                                        ; Combining channels R, G, B in xmm0
+    shufps xmm3, xmm3, 0                ; Duplicate channel R
+    shufps xmm2, xmm2, 0                ; Duplicate channel G
+    unpcklps xmm3, xmm2                 ; Combine R and G
+    movlhps xmm3, xmm1                  ; Add B to xmm0
 
-    mulps xmm3, xmm9         ; Przemno¿enie piksela przez wage
-    addps xmm0, xmm3         ; Dodanie do xmm0 (zainicjalizowane)
+    mulps xmm3, xmm9                    ; Multiplying by weight
+    addps xmm0, xmm3                    ; Adding to xmm0
     ret
 
 GaussianBlur endp
 
 LaplacianFilter proc
-    ; RCX - pointer to first element of the array
-    ; RDX - start idx (9, czyli drugi piksel drugiego wiersza)
-    ; R8  - end idx (54, ostatni indeks do przetworzenia)
-    ; R9  - empty array to fill
-    ; RSI - row counter
+                                        ; RCX - pointer to first element of the array
+                                        ; RDX - start of the array
+                                        ; R8  - end of the array
+                                        ; R9  - empty array to fill
+                                        ; RSI - row counter
 
-    mov RSI, 15         ; Initialize row counter (end of the second row)
+    mov RSI, 19                         ; Initialize row counter (end of the second row)
 
-    mov RBX, RDX         ; Copy start index to R8
+    mov RBX, RDX                        ; Copy start index to R8
     add RBX, RBX
-    add RBX, RBX          ; Multiply start index (R8) by 4 (to get byte offset)
-    add RCX, RBX         ; Move to section start
-    add R9, RBX         ; Move to section start
+    add RBX, RBX                        ; Multiply start index (R8) by 4 (to get byte offset)
+    add RCX, RBX                        ; Move to section start
+    add R9, RBX                         ; Move to section start
 
 startLoop: 
 
-    xorps xmm0, xmm0                ; Inicjalizacja xmm0, ktory bedzie przechowywal nowe wartosci piksela              
+    xorps xmm0, xmm0                    ; initializing xmm0 (new pixel value)              
 
-    mov eax, dword ptr [RCX - 36]    ; Lewy Górny s¹siad [X - -]
-    ;movups xmm9, dword ptr [minus]  ; Za³aduj wagê 1.0  [- X -]
-    call processPixel                ;                   [- - -]
+    mov eax, dword ptr [RCX - 36]       ; Left upper edge   [X - -]
+    movups xmm9, dword ptr [minus]      ; Load weight       [- - -]
+    call processPixel                   ;                   [- - -]
 
-    mov eax, dword ptr [RCX - 32]    ; Górny s¹siad      [- X -]
-    movups xmm9, dword ptr [minus]   ; Za³aduj wagê 2.0  [- - -]
-    call processPixel                ;                   [- - -]
+    mov eax, dword ptr [RCX - 32]       ; Upper edge        [- X -]
+    movups xmm9, dword ptr [minus]      ; Load weight       [- - -]
+    call processPixel                   ;                   [- - -]
 
-    mov eax, dword ptr [RCX - 28]    ; Prawy górny s¹siad[- - X]
-    movups xmm9, dword ptr [minus]   ; Za³aduj wagê 1.0  [- - -]
-    call processPixel                ;                   [- - -]
+    mov eax, dword ptr [RCX - 28]       ; Right upper edge  [- - X]
+    movups xmm9, dword ptr [minus]      ; Load weight       [- - -]
+    call processPixel                   ;                   [- - -]
 
-    mov eax, dword ptr [RCX - 4]     ; Lewy s¹siad       [- - -]
-    movups xmm9, dword ptr [minus]   ; Za³aduj wagê 2.0  [X - -]
-    call processPixel                ;                   [- - -]
+    mov eax, dword ptr [RCX - 4]        ; Left edge         [- - -]
+    movups xmm9, dword ptr [minus]      ; Load weight       [- - -]
+    call processPixel                   ;                   [- - -]
 
-    mov eax, dword ptr [RCX]         ; Bie¿¹cy piksel    [- - -]
-    movups xmm9, dword ptr [laplace] ; Za³aduj wagê 4.0  [- X -]
-    call processPixel                ;                   [- - -]
+    mov eax, dword ptr [RCX]            ; Center            [- - -]
+    movups xmm9, dword ptr [laplace]    ; Load weight       [- X -]
+    call processPixel                   ;                   [- - -]
 
-    mov eax, dword ptr [RCX + 4]     ; Prawy s¹siad      [- - -]
-    movups xmm9, dword ptr [minus]   ; Za³aduj wagê 2.0  [- - X]
-    call processPixel                ;                   [- - -]
+    mov eax, dword ptr [RCX + 4]        ; Right edge        [- - -]
+    movups xmm9, dword ptr [minus]      ; Load weight       [- - X]
+    call processPixel                   ;                   [- - -]
 
-    mov eax, dword ptr [RCX + 28]    ; Lewy dolny s¹siad [- - -]
-    movups xmm9, dword ptr [minus]   ; Za³aduj wagê 1.0  [- - -]
-    call processPixel                ;                   [X - -]
+    mov eax, dword ptr [RCX + 28]       ; Left lower edge   [- - -]
+    movups xmm9, dword ptr [minus]      ; Load weight       [- - -]
+    call processPixel                   ;                   [X - -]
 
-    mov eax, dword ptr [RCX + 32]    ; Dolny s¹siad      [- - -]
-    movups xmm9, dword ptr [minus]   ; Za³aduj wagê 2.0  [- - -]
-    call processPixel                ;                   [- X -]
+    mov eax, dword ptr [RCX + 32]       ; Lower edge        [- - -]
+    movups xmm9, dword ptr [minus]      ; Load weight       [- - -]
+    call processPixel                   ;                   [- X -]
 
-    mov eax, dword ptr [RCX + 36]    ; Prawy dolny s¹siad[- - -]
-    movups xmm9, dword ptr [minus]   ; Za³aduj wagê 1.0  [- - -]
-    call processPixel                ;                   [- - X]
+    mov eax, dword ptr [RCX + 36]       ; Right lower edge  [- - -]
+    movups xmm9, dword ptr [minus]      ; Load weight       [- - -]
+    call processPixel                   ;                   [- - X]
 
-    cvtps2dq xmm0, xmm0             ; Konwertuj zmiennoprzecinkowe wartoœci na ca³kowite
-    packusdw xmm0, xmm0             ; Pakuj wartoœci do 16-bitowych wartoœci
-    packuswb xmm0, xmm0             ; Pakuj wartoœci do 8-bitowych wartoœci
-    movd eax, xmm0                  ; Przenieœ wartoœæ do rejestru ogólnego przeznaczenia
-    and eax, 00FFFFFFh              ; Ustaw kana³ Alpha na 0x00
+    cvtps2dq xmm0, xmm0                 ; Convert float to integer
+    packusdw xmm0, xmm0                 ; Pack values to 16-bit
+    packuswb xmm0, xmm0                 ; Pack values to 8-bit
+    movd eax, xmm0                      ; Copy xmm0 to eax
+    and eax, 00FFFFFFh                  ; Set alpha channel to 0x00
  
-    mov [RCX], eax
-    mov [R9], eax                  ; Zapisz wynik do pamiêci
+    mov [R9], eax                       ; Set new pixel to empty array
 
-    add RCX, 4				;Increment array pinter
-    add R9, 4				;Increment array pinter
-    inc RDX					;Increment array index
+    add RCX, 4				            ;Increment array pointer
+    add R9, 4				            ;Increment array pointer
+    inc RDX					            ;Increment array index
 
-    cmp RDX, RSI        ; Check if the end of the row
-    jl continueLoop     ; If not end of the row, continue
+    cmp RDX, RSI                        ; Check if the end of the row
+    jl continueLoop                     ; If not end of the row, continue
 
-    ; Skip last element of the row and the first element of the next row
+                                        ; Skip last element of the row and the first element of the next row
     add RCX, 8
     add R9, 8
     add RDX, 2
 
-    ; Increment row counter to the end of the next row
-    add RSI, 8
+                                        ; Increment row counter to the end of the next row
+    add RSI, 10
 
 continueLoop:
-    cmp RDX, R8        ; Check if reached the end index
-    jl startLoop        ; If not reached, continue loop
-
-    xor rax, rax        ; Test
-    add rax, 10
+    cmp RDX, R8                         ; Check if reached the end index
+    jl startLoop                        ; If not reached, continue loop
     ret
 
 processPixel:
-                          ; Ekstrakcja kana³ów i konwersja na format zmiennoprzecinkowy
-    mov R10d, eax              ; Przekazanie piksela do rejestru R9
-    and R10d, redMask          ; Ekstrakcja kana³u czerwonego
-    shr R10d, 16               ; Przesuniecie kanalu na LSB
-    cvtsi2ss xmm1, R10d        ; Konwersja czerwonego na zmiennoprzecinkowe i za³adowanie do xmm0
+                                        ; Extracting channels and converting from int to float
+    mov R10d, eax                       ; Copying pixel to R10
+    and R10d, redMask                   ; Extracting red channel
+    shr R10d, 16                        ; Moving channel to LSB
+    cvtsi2ss xmm1, R10d                 ; Convert red channel to float and load to xmm0
 
-    mov R11d, eax             ; Przekazanie piksela do rejestru R10
-    and R11d, greenMask       ; Ekstrakcja kana³u zielonego
-    shr R11d, 8               ; Przesuniecie kanalu na LSB
-    cvtsi2ss xmm2, R11d       ; Konwersja zielonego na zmiennoprzecinkowe i za³adowanie do xmm1
+    mov R11d, eax                       ; Copying pixel to R11
+    and R11d, greenMask                 ; Extracting green channel
+    shr R11d, 8                         ; Moving channel to LSB
+    cvtsi2ss xmm2, R11d                 ; Convert green channel to float and load to xmm0
 
-    mov R12d, eax             ; Przekazanie piksela do rejestru R11
-    and R12d, blueMask        ; Ekstrakcja kana³u niebieskiego
-    cvtsi2ss xmm3, R12d       ; Konwersja niebieskiego na zmiennoprzecinkowe i za³adowanie do xmm2
+    mov R12d, eax                       ; Copying pixel to R11
+    and R12d, blueMask                  ; Extracting blue channel
+    cvtsi2ss xmm3, R12d                 ; Convert blue channel to float and load to xmm0
 
-                             ; £¹czenie kana³ów R, G, B w xmm0
-    shufps xmm3, xmm3, 0     ; Duplikacja wartoœci R
-    shufps xmm2, xmm2, 0     ; Duplikacja wartoœci G
-    unpcklps xmm3, xmm2      ; £¹czenie R i G
-    movlhps xmm3, xmm1       ; Dodanie B do xmm0
+                                        ; Combining channels R, G, B in xmm0
+    shufps xmm3, xmm3, 0                ; Duplicate channel R
+    shufps xmm2, xmm2, 0                ; Duplicate channel G
+    unpcklps xmm3, xmm2                 ; Combine R and G
+    movlhps xmm3, xmm1                  ; Add B to xmm0
 
-    mulps xmm3, xmm9         ; Przemno¿enie piksela przez wage
-    addps xmm0, xmm3         ; Dodanie do xmm0 (zainicjalizowane)
+    mulps xmm3, xmm9                    ; Multiplying by weight
+    addps xmm0, xmm3                    ; Adding to xmm0
     ret
 
 LaplacianFilter endp
