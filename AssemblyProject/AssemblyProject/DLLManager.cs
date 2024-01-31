@@ -16,6 +16,7 @@ namespace AssemblyProject
     {
 
         [DllImport(@"..\\..\\..\\..\\x64\\Debug\\JAAsm.dll")]
+        //public static extern unsafe void GaussianBlur(int[] rgbArray, int startPosition, int endPosition);
         public static extern unsafe void GaussianBlur(int[] rgbArray, int startPosition, int endPosition, int[] newArray);
 
         [DllImport(@"..\\..\\..\\..\\x64\\Debug\\JAAsm.dll")]
@@ -92,7 +93,14 @@ namespace AssemblyProject
                     // Przetwarzanie każdej funkcji w odpowiednim zakresie tablicy
                     for (int j = start; j < end; j++)
                     {
-                        GaussianBlur(rgbArrays[j], 9, 55, new int[100]);
+                        int[] newArray = new int[100];
+                        for (int k = 0; k < newArray.Length; k++)
+                        {
+                            newArray[k] = 333;
+                        }
+                        //newArray = rgbArrays[j];
+                        GaussianBlur(rgbArrays[j], 9, 55, newArray);
+                        rgbArrays[j] = newArray;
                     }
                 }
             );
@@ -128,7 +136,10 @@ namespace AssemblyProject
                             // Przetwarzanie każdej funkcji w odpowiednim zakresie tablicy
                             for (int j = start; j < end; j++)
                             {
-                                LaplacianFilter(rgbArrays[j], 9, 55, new int[100]);
+                                int[] newArray = new int[100];
+                                newArray = rgbArrays[j];
+                                LaplacianFilter(rgbArrays[j], 9, 55, newArray);
+                                rgbArrays[j] = newArray;
                             }
                         }
                     );
