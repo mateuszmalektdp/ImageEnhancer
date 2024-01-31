@@ -54,11 +54,11 @@ GaussianBlur proc
 
     mov RSI, 19                         ; Initialize row counter (end of the second row)
 
-    mov RBX, RDX                        ; Copy start index to R8
+    mov RBX, RDX                        ; Copy start index to RBX
     add RBX, RBX
-    add RBX, RBX                        ; Multiply start index (R8) by 4 (to get byte offset)
+    add RBX, RBX                        ; Multiply start index (RBX) by 4 (to get byte offset)
     add RCX, RBX                        ; Move to section start
-    add RDX, RBX                        ; Move to section start
+    add R9, RBX                        ; Move to section start
 
 startLoop: 
 
@@ -100,7 +100,7 @@ startLoop:
     movups xmm9, dword ptr [corner]     ; Load weight       [- - -]
     call processPixel                   ; Call process func [- - X]
 
-    divps xmm0, divide 
+    divps xmm0, divide                  ; Divide sum of the channels by total weight to get new values of the pixel
 
     cvtps2dq xmm0, xmm0                 ; Convert float to integer
     packusdw xmm0, xmm0                 ; Pack values to 16-bit
@@ -236,7 +236,7 @@ startLoop:
 continueLoop:
     cmp RDX, R8                         ; Check if reached the end index
     jl startLoop                        ; If not reached, continue loop
-    ret                                 ; If reached, return 
+    ret                                 ; If reached, return from procedure
 
 processPixel:
                                         ; Extracting channels and converting from int to float
