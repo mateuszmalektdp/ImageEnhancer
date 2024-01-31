@@ -1,0 +1,10 @@
+C:\Users\mati\source\repos\AssemblyProject\AssemblyProject\bin\Release\AssemblyProject.exe.config
+C:\Users\mati\source\repos\AssemblyProject\AssemblyProject\bin\Release\AssemblyProject.exe
+C:\Users\mati\source\repos\AssemblyProject\AssemblyProject\bin\Release\AssemblyProject.pdb
+C:\Users\mati\source\repos\AssemblyProject\AssemblyProject\obj\Release\AssemblyProject.csproj.AssemblyReference.cache
+C:\Users\mati\source\repos\AssemblyProject\AssemblyProject\obj\Release\AssemblyProject.Form1.resources
+C:\Users\mati\source\repos\AssemblyProject\AssemblyProject\obj\Release\AssemblyProject.Properties.Resources.resources
+C:\Users\mati\source\repos\AssemblyProject\AssemblyProject\obj\Release\AssemblyProject.csproj.GenerateResource.cache
+C:\Users\mati\source\repos\AssemblyProject\AssemblyProject\obj\Release\AssemblyProject.csproj.CoreCompileInputs.cache
+C:\Users\mati\source\repos\AssemblyProject\AssemblyProject\obj\Release\AssemblyProject.exe
+C:\Users\mati\source\repos\AssemblyProject\AssemblyProject\obj\Release\AssemblyProject.pdb

@@ -1,0 +1,3 @@
+﻿  Assembling JAAsm.asm...
+LINK : error LNK2001: nierozpoznany symbol zewnętrzny _DllMainCRTStartup
+C:\Users\mati\source\repos\AssemblyProject\x64\Release\JAAsm.dll : fatal error LNK1120: liczba nierozpoznanych elementów zewnętrznych: 1
