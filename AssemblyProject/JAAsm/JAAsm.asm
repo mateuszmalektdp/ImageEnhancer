@@ -90,15 +90,15 @@ startLoop:
 
     mov eax, dword ptr [RCX + 28]       ; Left lower edge   [- - -]
     movups xmm9, dword ptr [corner]     ; Load weight       [- - -]
-    call processPixel                   ; Call process func [- - -]
+    call processPixel                   ; Call process func [X - -]
 
     mov eax, dword ptr [RCX + 32]       ; Lower edge        [- - -]
     movups xmm9, dword ptr [diag]       ; Load weight       [- - -]
-    call processPixel                   ; Call process func [- - -]
+    call processPixel                   ; Call process func [- X -]
 
     mov eax, dword ptr [RCX + 36]       ; Right lower edge  [- - -]
     movups xmm9, dword ptr [corner]     ; Load weight       [- - -]
-    call processPixel                   ; Call process func [- - -]
+    call processPixel                   ; Call process func [- - X]
 
     divps xmm0, divide 
 
@@ -110,9 +110,9 @@ startLoop:
  
     mov [R9], eax                       ; Set new pixel to empty array
 
-    add RCX, 4                          ;Increment array pointer
-    add R9, 4                           ;Increment array pointer
-    inc RDX                             ;Increment array index
+    add RCX, 4                          ; Increment array pointer
+    add R9, 4                           ; Increment array pointer
+    inc RDX                             ; Increment array index
 
     cmp RDX, RSI                        ; Check if the end of the row
     jl continueLoop                     ; If not end of the row, continue
