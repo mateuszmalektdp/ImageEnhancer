@@ -16,7 +16,6 @@ namespace AssemblyProject
     {
 
         [DllImport(@"..\\..\\..\\..\\x64\\Debug\\JAAsm.dll")]
-        //public static extern unsafe void GaussianBlur(int[] rgbArray, int startPosition, int endPosition);
         public static extern unsafe void GaussianBlur(int[] rgbArray, int startPosition, int endPosition, int[] newArray);
 
         [DllImport(@"..\\..\\..\\..\\x64\\Debug\\JAAsm.dll")]
@@ -94,12 +93,12 @@ namespace AssemblyProject
                     for (int j = start; j < end; j++)
                     {
                         int[] newArray = new int[100];
-                        for (int k = 0; k < newArray.Length; k++)
+                        /*for (int k = 0; k < newArray.Length; k++)
                         {
-                            newArray[k] = 333;
-                        }
-                        //newArray = rgbArrays[j];
-                        GaussianBlur(rgbArrays[j], 9, 55, newArray);
+                         //   newArray[k] = 333;
+                        }*/
+                        newArray = rgbArrays[j];
+                        GaussianBlur(rgbArrays[j], 10, 89, newArray);
                         rgbArrays[j] = newArray;
                     }
                 }
@@ -138,7 +137,7 @@ namespace AssemblyProject
                             {
                                 int[] newArray = new int[100];
                                 newArray = rgbArrays[j];
-                                LaplacianFilter(rgbArrays[j], 9, 55, newArray);
+                                LaplacianFilter(rgbArrays[j], 10, 89, newArray);
                                 rgbArrays[j] = newArray;
                             }
                         }
@@ -190,7 +189,7 @@ namespace AssemblyProject
         }
         public int[][] SplitRectArray(int[] rectToArray, int rectSize)
         {
-            int numOfSmallArrays = rectSize / 8;
+            int numOfSmallArrays = (rectSize - 2) / 8;
             int[][] splittedArray = new int[numOfSmallArrays * numOfSmallArrays][];
 
             for (int i = 0; i < numOfSmallArrays; i++)
@@ -198,14 +197,14 @@ namespace AssemblyProject
                 for (int j = 0; j < numOfSmallArrays; j++)
                 {
                     int smallArrayIndex = i * numOfSmallArrays + j;
-                    splittedArray[smallArrayIndex] = new int[64];
+                    splittedArray[smallArrayIndex] = new int[100]; // 10x10 array
 
-                    for (int y = 0; y < 8; y++)
+                    for (int y = 0; y < 10; y++)
                     {
-                        for (int x = 0; x < 8; x++)
+                        for (int x = 0; x < 10; x++)
                         {
                             int indexInRectArray = (i * 8 + y) * rectSize + j * 8 + x;
-                            splittedArray[smallArrayIndex][y * 8 + x] = rectToArray[indexInRectArray];
+                            splittedArray[smallArrayIndex][y * 10 + x] = rectToArray[indexInRectArray];
                         }
                     }
                 }
@@ -214,11 +213,10 @@ namespace AssemblyProject
             return splittedArray;
         }
 
-
         public int[] CombineArrays(int[][] splittedArray)
         {
             int numOfSmallArrays = (int)Math.Sqrt(splittedArray.Length);
-            int tableSize = numOfSmallArrays * 8;
+            int tableSize = 8 * numOfSmallArrays + 2; // Adjusted table size
             int[] rectToArray = new int[tableSize * tableSize];
 
             for (int i = 0; i < numOfSmallArrays; i++)
@@ -227,12 +225,16 @@ namespace AssemblyProject
                 {
                     int smallArrayIndex = i * numOfSmallArrays + j;
 
-                    for (int y = 0; y < 8; y++)
+                    for (int y = 0; y < 10; y++)
                     {
-                        for (int x = 0; x < 8; x++)
+                        for (int x = 0; x < 10; x++)
                         {
                             int indexInRectArray = (i * 8 + y) * tableSize + j * 8 + x;
-                            rectToArray[indexInRectArray] = splittedArray[smallArrayIndex][y * 8 + x];
+                            // Avoid overwriting shared edges
+                            if (!(x == 9 && j < numOfSmallArrays - 1) && !(y == 9 && i < numOfSmallArrays - 1))
+                            {
+                                rectToArray[indexInRectArray] = splittedArray[smallArrayIndex][y * 10 + x];
+                            }
                         }
                     }
                 }

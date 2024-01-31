@@ -77,34 +77,31 @@ namespace AssemblyProject
         //        ExecutionTime.Text = ticks.ToString() + "\n" + ExecutionTime.Text;
         //    }
         //}
-
-       
-
+           
         private void pictureBox_Click(object sender, EventArgs e)
         {
             MouseEventArgs me = (MouseEventArgs)e;
-        
+
             // Pobranie wartości z suwaka
             int squareSize = trackBarSquareArea.Value * 32;
 
             // Ustalenie współrzędnych obszaru kwadratowego
-            int x = Math.Max(0, me.X - squareSize); // X górny lewy róg kwadratu
-            int y = Math.Max(0, me.Y - squareSize); // Y górny lewy róg kwadratu
-            
-            if (x + 2*squareSize > pictureBox.Width)
+            int x = Math.Max(0, me.X - squareSize - 1); // X górny lewy róg kwadratu (z ramką)
+            int y = Math.Max(0, me.Y - squareSize - 1); // Y górny lewy róg kwadratu (z ramką)
+
+            if (x + 2 * squareSize + 2 > pictureBox.Width) // Sprawdzenie prawej granicy z ramką
             {
-                x = pictureBox.Width - 2*squareSize;
+                x = pictureBox.Width - 2 * squareSize - 2;
             }
 
-            // Sprawdzenie, czy obszar wykracza poza dolną krawędź obrazu
-            if (y + 2*squareSize > pictureBox.Height)
+            if (y + 2 * squareSize + 2 > pictureBox.Height) // Sprawdzenie dolnej granicy z ramką
             {
-                y = pictureBox.Height - 2*squareSize;
+                y = pictureBox.Height - 2 * squareSize - 2;
             }
 
-            // Ustalenie szerokości i wysokości kwadratu w zakresie od 64x64 do 640x640
-            int width = squareSize * 2; // Szerokość kwadratu
-            int height = squareSize * 2; // Wysokość kwadratu
+            // Ustalenie szerokości i wysokości kwadratu (z ramką) w zakresie od 66x66 do 642x642
+            int width = squareSize * 2 + 2; // Szerokość kwadratu (z ramką)
+            int height = squareSize * 2 + 2; // Wysokość kwadratu (z ramką)
 
             // Opcjonalnie: Ustalenie obszaru dla wyostrzenia obrazu (możesz użyć innego obrazu zamiast pictureBox.Image)
             Rectangle rect = new Rectangle(x, y, width, height);

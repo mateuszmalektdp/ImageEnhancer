@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\mati\\source\\repos\\AssemblyProject\\JACs\\JACs.csproj",
+      "projectUniqueName": "C:\\Users\\mati\\Documents\\GitHub\\ImageEnhancer\\AssemblyProject\\JACs\\JACs.csproj",
       "projectName": "JACs",
-      "projectPath": "C:\\Users\\mati\\source\\repos\\AssemblyProject\\JACs\\JACs.csproj",
+      "projectPath": "C:\\Users\\mati\\Documents\\GitHub\\ImageEnhancer\\AssemblyProject\\JACs\\JACs.csproj",
       "packagesPath": "C:\\Users\\mati\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\mati\\source\\repos\\AssemblyProject\\JACs\\obj\\",
+      "outputPath": "C:\\Users\\mati\\Documents\\GitHub\\ImageEnhancer\\AssemblyProject\\JACs\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\mati\\AppData\\Roaming\\NuGet\\NuGet.Config",
