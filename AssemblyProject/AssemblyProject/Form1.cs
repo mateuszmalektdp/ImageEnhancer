@@ -120,8 +120,6 @@ namespace AssemblyProject
                 pictureBox.Image = image;
             }
         }
-
-
         public void FunctionSelect(int[][] splittedArray, MouseEventArgs me)
         {
             if (radioButtonASM.Checked && me.Button == MouseButtons.Left)

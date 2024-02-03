@@ -261,7 +261,7 @@ namespace AssemblyProject
             this.Controls.Add(this.radioButtonASM);
             this.Controls.Add(this.radioButtonC);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Image Enhancer";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarSquareArea)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numberOfThreads)).EndInit();

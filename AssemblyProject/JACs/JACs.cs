@@ -13,7 +13,7 @@ namespace JACs
         private static readonly int[] GreenMask = { 0x00FF00 };
         private static readonly int[] BlueMask = { 0x0000FF };
 
-        // Assuming pixel format is 0xAARRGGBB
+        //Pixel format is 0xAARRGGBB
         public static void LaplacianFilterCS(int[] oldArray, int[] newArray)
         {
             float minus = -0.5f;
@@ -39,6 +39,7 @@ namespace JACs
                         }
                     }
 
+                    //Set new pixel value
                     byte newR = (byte)ClampColorValue(newPixel[0]);
                     byte newG = (byte)ClampColorValue(newPixel[1]);
                     byte newB = (byte)ClampColorValue(newPixel[2]);
