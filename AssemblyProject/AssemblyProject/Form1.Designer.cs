@@ -36,15 +36,22 @@ namespace AssemblyProject
             this.trackBarSquareArea = new System.Windows.Forms.TrackBar();
             this.numberOfThreads = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
+            this.labelMin = new System.Windows.Forms.Label();
+            this.labelMax = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.buttonLoadImage = new System.Windows.Forms.Button();
             this.ExecutionTime = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.labelSquareArea = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.labelImageArea = new System.Windows.Forms.Label();
+            this.buttonSave = new System.Windows.Forms.Button();
+            this.panel1 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarSquareArea)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numberOfThreads)).BeginInit();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // radioButtonC
@@ -57,7 +64,6 @@ namespace AssemblyProject
             this.radioButtonC.TabStop = true;
             this.radioButtonC.Text = "Using C#";
             this.radioButtonC.UseVisualStyleBackColor = true;
-            this.radioButtonC.CheckedChanged += new System.EventHandler(this.radioButtonC_CheckedChanged);
             // 
             // radioButtonASM
             // 
@@ -69,13 +75,12 @@ namespace AssemblyProject
             this.radioButtonASM.TabStop = true;
             this.radioButtonASM.Text = "Using assembly";
             this.radioButtonASM.UseVisualStyleBackColor = true;
-            this.radioButtonASM.CheckedChanged += new System.EventHandler(this.radioButtonASM_CheckedChanged);
             // 
             // pictureBox
             // 
-            this.pictureBox.Location = new System.Drawing.Point(314, 3);
+            this.pictureBox.Location = new System.Drawing.Point(0, 0);
             this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new System.Drawing.Size(1024, 768);
+            this.pictureBox.Size = new System.Drawing.Size(300, 300);
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox.TabIndex = 2;
             this.pictureBox.TabStop = false;
@@ -113,7 +118,6 @@ namespace AssemblyProject
             0,
             0,
             0});
-            this.numberOfThreads.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
             // 
             // label1
             // 
@@ -124,37 +128,28 @@ namespace AssemblyProject
             this.label1.TabIndex = 5;
             this.label1.Text = "Number of Threads";
             // 
-            // label3
+            // labelMin
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(8, 117);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(300, 13);
-            this.label3.TabIndex = 7;
-            this.label3.Text = "Square area size: 64x64 for value 1, ... 128x128 for value 2...\"";
+            this.labelMin.AutoSize = true;
+            this.labelMin.Location = new System.Drawing.Point(12, 177);
+            this.labelMin.Name = "labelMin";
+            this.labelMin.Size = new System.Drawing.Size(13, 13);
+            this.labelMin.TabIndex = 8;
+            this.labelMin.Text = "0";
             // 
-            // label2
+            // labelMax
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 177);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(13, 13);
-            this.label2.TabIndex = 8;
-            this.label2.Text = "0";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(283, 177);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(25, 13);
-            this.label4.TabIndex = 9;
-            this.label4.Text = "640";
+            this.labelMax.AutoSize = true;
+            this.labelMax.Location = new System.Drawing.Point(283, 177);
+            this.labelMax.Name = "labelMax";
+            this.labelMax.Size = new System.Drawing.Size(27, 13);
+            this.labelMax.TabIndex = 9;
+            this.labelMax.Text = "N/A";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(8, 213);
+            this.label5.Location = new System.Drawing.Point(8, 251);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(83, 13);
             this.label5.TabIndex = 10;
@@ -173,36 +168,105 @@ namespace AssemblyProject
             // ExecutionTime
             // 
             this.ExecutionTime.AutoSize = true;
-            this.ExecutionTime.Location = new System.Drawing.Point(97, 213);
+            this.ExecutionTime.Location = new System.Drawing.Point(97, 251);
             this.ExecutionTime.Name = "ExecutionTime";
             this.ExecutionTime.Size = new System.Drawing.Size(13, 13);
             this.ExecutionTime.TabIndex = 5;
             this.ExecutionTime.Text = "0";
-            this.ExecutionTime.Click += new System.EventHandler(this.ExecutionTime_Click);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(8, 226);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(89, 13);
+            this.label6.TabIndex = 13;
+            this.label6.Text = "Square area size:";
+            // 
+            // labelSquareArea
+            // 
+            this.labelSquareArea.AutoSize = true;
+            this.labelSquareArea.Location = new System.Drawing.Point(97, 226);
+            this.labelSquareArea.Name = "labelSquareArea";
+            this.labelSquareArea.Size = new System.Drawing.Size(24, 13);
+            this.labelSquareArea.TabIndex = 14;
+            this.labelSquareArea.Text = "0x0";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(8, 117);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(249, 13);
+            this.label3.TabIndex = 7;
+            this.label3.Text = "Square area size: 2+(64*X) where X is Slider Value\"";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(8, 202);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(89, 13);
+            this.label2.TabIndex = 15;
+            this.label2.Text = "Total image area:";
+            // 
+            // labelImageArea
+            // 
+            this.labelImageArea.AutoSize = true;
+            this.labelImageArea.Location = new System.Drawing.Point(97, 202);
+            this.labelImageArea.Name = "labelImageArea";
+            this.labelImageArea.Size = new System.Drawing.Size(24, 13);
+            this.labelImageArea.TabIndex = 16;
+            this.labelImageArea.Text = "0x0";
+            // 
+            // buttonSave
+            // 
+            this.buttonSave.Location = new System.Drawing.Point(8, 290);
+            this.buttonSave.Name = "buttonSave";
+            this.buttonSave.Size = new System.Drawing.Size(151, 46);
+            this.buttonSave.TabIndex = 17;
+            this.buttonSave.Text = "Save Image";
+            this.buttonSave.UseVisualStyleBackColor = true;
+            this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
+            // 
+            // panel1
+            // 
+            this.panel1.AutoScroll = true;
+            this.panel1.Controls.Add(this.pictureBox);
+            this.panel1.Location = new System.Drawing.Point(316, 3);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(1600, 900);
+            this.panel1.TabIndex = 18;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1147, 545);
+            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.buttonSave);
+            this.Controls.Add(this.labelImageArea);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.labelSquareArea);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.buttonLoadImage);
             this.Controls.Add(this.ExecutionTime);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.labelMax);
+            this.Controls.Add(this.labelMin);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.numberOfThreads);
             this.Controls.Add(this.trackBarSquareArea);
-            this.Controls.Add(this.pictureBox);
             this.Controls.Add(this.radioButtonASM);
             this.Controls.Add(this.radioButtonC);
             this.Name = "Form1";
             this.Text = "Form1";
-            this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarSquareArea)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numberOfThreads)).EndInit();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -216,12 +280,18 @@ namespace AssemblyProject
         private System.Windows.Forms.TrackBar trackBarSquareArea;
         private NumericUpDown numberOfThreads;
         private Label label1;
-        private Label label3;
-        private Label label2;
-        private Label label4;
+        private Label labelMin;
+        private Label labelMax;
         private Label label5;
         private Button buttonLoadImage;
         private Label ExecutionTime;
+        private Label label6;
+        private Label labelSquareArea;
+        private Label label3;
+        private Label label2;
+        private Label labelImageArea;
+        private Button buttonSave;
+        private Panel panel1;
     }
 }
 
