@@ -16,10 +16,10 @@ namespace AssemblyProject
     {
         // Assembly DLL load for GaussianBlur and LaplacianFilter operations
         [DllImport(@"..\\..\\..\\..\\x64\\Debug\\ImageEnhancerASM.dll")]
-        public static extern unsafe void GaussianBlurASM(int[] rgbArray, int startPosition, int endPosition, int[] newArray);
+        public static extern unsafe void GaussianBlurASM(int[] rgbArray, int[] newArray, int startPosition, int endPosition);
 
         [DllImport(@"..\\..\\..\\..\\x64\\Debug\\ImageEnhancerASM.dll")]
-        public static extern unsafe void LaplacianFilterASM(int[] rgbArray, int startPosition, int endPosition, int[] newArray);
+        public static extern unsafe void LaplacianFilterASM(int[] rgbArray, int[] newArray, int startPosition, int endPosition);
         Thread[] threads;
         object[] dllResult;
         public int max = 0;
@@ -147,7 +147,7 @@ namespace AssemblyProject
                             {
                                 int[] newArray = new int[100];
                                 newArray = rgbArrays[j];
-                                LaplacianFilterASM(rgbArrays[j], 10, 89, newArray);
+                                LaplacianFilterASM(rgbArrays[j], newArray, 10, 89);
                                 rgbArrays[j] = newArray;
                             }
                         }
@@ -187,7 +187,7 @@ namespace AssemblyProject
                         {
                             int[] newArray = new int[100];
                             newArray = rgbArrays[j];
-                            GaussianBlurASM(rgbArrays[j], 10, 89, newArray);
+                            GaussianBlurASM(rgbArrays[j], newArray, 10, 89);
                             rgbArrays[j] = newArray;
 
                         }

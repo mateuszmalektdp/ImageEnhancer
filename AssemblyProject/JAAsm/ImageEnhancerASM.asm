@@ -9,18 +9,18 @@
 ; (int[] oldArray, 10, 89, int[] newArray)
 ;
 ; Parameters:
-; oldArray:         An array of integers representing pixel data for a 10x10 square. Each integer
-;                   is in the format EE-RR-GG-BB, where E = empty (unused bits), R = red, G = green,
-;                   B = blue. This array represents the original pixel data before any processing.
+; RCX - oldArray:         An array of integers representing pixel data for a 10x10 square. Each integer
+;                         is in the format EE-RR-GG-BB, where E = empty (unused bits), R = red, G = green,
+;                         B = blue. This array represents the original pixel data before any processing.
 ;
-; startValue (10):  An integer representing the start index for processing, avoiding the
-;                   first row and column of the 10x10 square (edges).
+; RDX - newArray:         An array of integers that will store the modified pixel data after processing.
+;                         This array should be initialized with the same size as oldArray.
 ;
-; endValue (89):    An integer representing the end index for processing, avoiding the last
-;                   row and column of the 10x10 square (edges).
+; R8  - startValue (10):  An integer representing the start index for processing, avoiding the
+;                         first row and column of the 10x10 square (edges).
 ;
-; newArray:         An array of integers that will store the modified pixel data after processing.
-;                   This array should be initialized with the same size as oldArray.
+; R9  - endValue (89):    An integer representing the end index for processing, avoiding the last
+;                         row and column of the 10x10 square (edges).
 ;
 ; Description:
 ; The function processes a 10x10 square of pixel data from oldArray, avoiding the edges
@@ -30,6 +30,12 @@
 ; from oldArray are preserved in newArray. The format of pixel data in newArray remains the
 ; same as in oldArray (EE-RR-GG-BB). The use of newArray allows for the original edge pixels
 ; to remain unchanged while the inner pixels are processed and modified.
+;
+; Initialized values:
+;  - pointer to first element of the array
+; RDX - empty array to fill     
+; R8  - start of the array       
+; R9  - end of the array
 
     minus   dd -0.5, -0.5, -0.5, -0.5   ; Weight of the surrounding pixels (laplace)
     laplace dd 5.0, 5.0, 5.0, 5.0       ; Weight of the center (laplace)
@@ -46,19 +52,14 @@
 .code
 
 LaplacianFilterASM proc
-                                        ; RCX - pointer to first element of the array
-                                        ; RDX - start of the array
-                                        ; R8  - end of the array
-                                        ; R9  - empty array to fill
-                                        ; RSI - row counter
 
     mov RSI, 19                         ; Initialize row counter (end of the second row)
 
-    mov RBX, RDX                        ; Copy start index to R8
+    mov RBX, R8                         ; Copy start index to RBX
     add RBX, RBX
-    add RBX, RBX                        ; Multiply start index (R8) by 4 (to get byte offset)
+    add RBX, RBX                        ; Multiply start index (RBX) by 4 (to get byte offset)
     add RCX, RBX                        ; Move to section start
-    add R9, RBX                         ; Move to section start
+    add RDX, RBX                        ; Move to section start
 
 startLoop: 
 
@@ -106,24 +107,24 @@ startLoop:
     movd eax, xmm0                      ; Copy xmm0 to eax
     and eax, 00FFFFFFh                  ; Set alpha channel to 0x00
  
-    mov [R9], eax                       ; Set new pixel to empty array
+    mov [RDX], eax                      ; Set new pixel to empty array
 
     add RCX, 4                          ; Increment array pointer
-    add R9, 4                           ; Increment array pointer
-    inc RDX                             ; Increment array index
+    add RDX, 4                          ; Increment array pointer
+    inc R8                              ; Increment array index
 
-    cmp RDX, RSI                        ; Check if the end of the row
+    cmp R8, RSI                         ; Check if the end of the row
     jl continueLoop                     ; If not end of the row, continue
 
                                         
     add RCX, 8                          ; Skip last element of the row and the first element of the next row in original array
-    add R9, 8                           ; Increment the new array to align with original one 
-    add RDX, 2                          ; Increment array index
+    add RDX, 8                          ; Increment the new array to align with original one 
+    add R8, 2                           ; Increment array index
                                         
     add RSI, 10                         ; Increment row counter to the end of the next row
 
 continueLoop:
-    cmp RDX, R8                         ; Check if reached the end index
+    cmp R8, R9                          ; Check if reached the end index
     jl startLoop                        ; If not reached, continue loop
     ret                                 ; If reached, return from procedure
 
@@ -156,19 +157,14 @@ processPixel:
 LaplacianFilterASM endp
 
 GaussianBlurASM proc
-                                        ; RCX - pointer to first element of the array
-                                        ; RDX - start of the array
-                                        ; R8  - end of the array
-                                        ; R9  - empty array to fill
-                                        ; RSI - row counter
 
     mov RSI, 19                         ; Initialize row counter (end of the second row)
 
-    mov RBX, RDX                        ; Copy start index to RBX
+    mov RBX, R8                         ; Copy start index to RBX
     add RBX, RBX
     add RBX, RBX                        ; Multiply start index (RBX) by 4 (to get byte offset)
     add RCX, RBX                        ; Move to section start
-    add R9, RBX                        ; Move to section start
+    add RDX, RBX                        ; Move to section start
 
 startLoop: 
 
@@ -218,23 +214,23 @@ startLoop:
     movd eax, xmm0                      ; Copy xmm0 to eax
     and eax, 00FFFFFFh                  ; Set alpha channel to 0x00
  
-    mov [R9], eax                       ; Set new pixel to empty array
+    mov [RDX], eax                      ; Set new pixel to empty array
 
     add RCX, 4                          ; Increment array pointer
-    add R9, 4                           ; Increment array pointer
-    inc RDX                             ; Increment array index
+    add RDX, 4                          ; Increment array pointer
+    inc R8                              ; Increment array index
 
-    cmp RDX, RSI                        ; Check if the end of the row
+    cmp R8, RSI                         ; Check if the end of the row
     jl continueLoop                     ; If not end of the row, continue
                                      
     add RCX, 8                          ; Skip last element of the row and the first element of the next row in original array
-    add R9, 8                           ; Increment the new array to align with original one 
-    add RDX, 2                          ; Increment array index
+    add RDX, 8                          ; Increment the new array to align with original one 
+    add R8, 2                           ; Increment array index
                                        
     add RSI, 10                         ; Increment row counter to the end of the next row
 
 continueLoop:
-    cmp RDX, R8                         ; Check if reached the end index
+    cmp R8, R9                          ; Check if reached the end index
     jl startLoop                        ; If not reached, continue loop
     ret                                 ; If reached, return from procedure
 
