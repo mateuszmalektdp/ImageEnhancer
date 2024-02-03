@@ -1,6 +1,0 @@
-C:\Users\mati\Documents\GitHub\ImageEnhancer\AssemblyProject\JACs\bin\x64\Debug\JACs.dll
-C:\Users\mati\Documents\GitHub\ImageEnhancer\AssemblyProject\JACs\bin\x64\Debug\JACs.pdb
-C:\Users\mati\Documents\GitHub\ImageEnhancer\AssemblyProject\JACs\obj\x64\Debug\JACs.csproj.AssemblyReference.cache
-C:\Users\mati\Documents\GitHub\ImageEnhancer\AssemblyProject\JACs\obj\x64\Debug\JACs.csproj.CoreCompileInputs.cache
-C:\Users\mati\Documents\GitHub\ImageEnhancer\AssemblyProject\JACs\obj\x64\Debug\JACs.dll
-C:\Users\mati\Documents\GitHub\ImageEnhancer\AssemblyProject\JACs\obj\x64\Debug\JACs.pdb

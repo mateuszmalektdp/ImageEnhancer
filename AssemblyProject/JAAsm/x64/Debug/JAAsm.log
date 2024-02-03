@@ -1,4 +1,0 @@
-﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: Katalog pośredni (x64\Debug\) zawiera pliki udostępnione z innego projektu (JAAsm.vcxproj). Może to spowodować niepoprawne zachowanie podczas oczyszczania i ponownej kompilacji.
-  Assembling ImageEnhancerASM.asm...
-     Trwa tworzenie biblioteki C:\Users\mati\Documents\GitHub\ImageEnhancer\AssemblyProject\x64\Debug\ImageEnhancerASM.lib i obiektu C:\Users\mati\Documents\GitHub\ImageEnhancer\AssemblyProject\x64\Debug\ImageEnhancerASM.exp
-  JAAsm.vcxproj -> C:\Users\mati\Documents\GitHub\ImageEnhancer\AssemblyProject\x64\Debug\ImageEnhancerASM.dll

@@ -1,0 +1,10 @@
+C:\Users\mati\Documents\GitHub\ImageEnhancer\AssemblyProject\ImageEnhancerMain\obj\Debug\ImageEnhancerMain.csproj.AssemblyReference.cache
+C:\Users\mati\Documents\GitHub\ImageEnhancer\AssemblyProject\ImageEnhancerMain\obj\Debug\ImageEnhancerMain.csproj.GenerateResource.cache
+C:\Users\mati\Documents\GitHub\ImageEnhancer\AssemblyProject\ImageEnhancerMain\obj\Debug\ImageEnhancerMain.csproj.CoreCompileInputs.cache
+C:\Users\mati\Documents\GitHub\ImageEnhancer\AssemblyProject\ImageEnhancerMain\obj\Debug\ImageEnhancerMain.Form1.resources
+C:\Users\mati\Documents\GitHub\ImageEnhancer\AssemblyProject\ImageEnhancerMain\obj\Debug\ImageEnhancerMain.Properties.Resources.resources
+C:\Users\mati\Documents\GitHub\ImageEnhancer\AssemblyProject\ImageEnhancerMain\bin\Debug\ImageEnhancerMain.exe.config
+C:\Users\mati\Documents\GitHub\ImageEnhancer\AssemblyProject\ImageEnhancerMain\bin\Debug\ImageEnhancerMain.exe
+C:\Users\mati\Documents\GitHub\ImageEnhancer\AssemblyProject\ImageEnhancerMain\bin\Debug\ImageEnhancerMain.pdb
+C:\Users\mati\Documents\GitHub\ImageEnhancer\AssemblyProject\ImageEnhancerMain\obj\Debug\ImageEnhancerMain.exe
+C:\Users\mati\Documents\GitHub\ImageEnhancer\AssemblyProject\ImageEnhancerMain\obj\Debug\ImageEnhancerMain.pdb
