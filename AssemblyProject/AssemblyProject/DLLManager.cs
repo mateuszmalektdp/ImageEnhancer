@@ -14,11 +14,11 @@ namespace AssemblyProject
 {
     internal class DLLManager
     {
-
-        [DllImport(@"..\\..\\..\\..\\x64\\Debug\\JAAsm.dll")]
+        // Assembly DLL load for GaussianBlur and LaplacianFilter operations
+        [DllImport(@"..\\..\\..\\..\\x64\\Debug\\ImageEnhancerASM.dll")]
         public static extern unsafe void GaussianBlurASM(int[] rgbArray, int startPosition, int endPosition, int[] newArray);
 
-        [DllImport(@"..\\..\\..\\..\\x64\\Debug\\JAAsm.dll")]
+        [DllImport(@"..\\..\\..\\..\\x64\\Debug\\ImageEnhancerASM.dll")]
         public static extern unsafe void LaplacianFilterASM(int[] rgbArray, int startPosition, int endPosition, int[] newArray);
         Thread[] threads;
         object[] dllResult;
@@ -30,9 +30,9 @@ namespace AssemblyProject
         
         public void PrepareLaplacianFilterCS(int[][] rgbArrays, int threadsNumber)
         {
-            string path = @"..\..\..\..\JACs\bin\Debug\JACs.dll";
+            string path = @"..\..\..\..\ImageEnhancerCS\bin\Debug\ImageEnhancerCS.dll";
             var assembly = Assembly.LoadFrom(path);
-            var type = assembly.GetType("JACs.JACs");
+            var type = assembly.GetType("ImageEnhancerCS.ImageEnhancerCS");
             var activator = Activator.CreateInstance(type);
             MethodInfo method = type.GetMethod("LaplacianFilterCS");
             dllResult = new object[threadsNumber];
@@ -42,7 +42,7 @@ namespace AssemblyProject
             {
                 for (int i = 0; i < threadsNumber; i++)
                 {
-                    int threadIndex = i; // Aby uniknąć problemu zamknięcia pętli
+                    int threadIndex = i; // To avoid the closure loop issue
                     threads[i] = new Thread(
                     () =>
                     {
@@ -52,11 +52,11 @@ namespace AssemblyProject
                         max = end - start;
                         if (threadIndex == threadsNumber - 1)
                         {
-                            // Ostatni wątek obsługuje resztę
+                            // The last thread handles the remainder
                             end = rgbArrays.Length;
                         }
 
-                        // Przetwarzanie każdej funkcji w odpowiednim zakresie tablicy
+                        // Processing each function within the specific array range
                         for (int j = start; j < end; j++)
                         {
                             int[] newArray = new int[100];
@@ -71,15 +71,15 @@ namespace AssemblyProject
             }
             catch (Exception)
             {
-                // Obsługa wyjątków
+                // Exception handling
             }
         }
 
         public void PrepareGaussianBlurCS(int[][] rgbArrays, int threadsNumber)
         {
-            string path = @"..\..\..\..\JACs\bin\Debug\JACs.dll";
+            string path = @"..\..\..\..\ImageEnhancerCS\bin\Debug\ImageEnhancerCS.dll";
             var assembly = Assembly.LoadFrom(path);
-            var type = assembly.GetType("JACs.JACs");
+            var type = assembly.GetType("ImageEnhancerCS.ImageEnhancerCS");
             var activator = Activator.CreateInstance(type);
             MethodInfo method = type.GetMethod("GaussianBlurCS");
             dllResult = new object[threadsNumber];
@@ -88,7 +88,7 @@ namespace AssemblyProject
             {
                 for (int i = 0; i < threadsNumber; i++)
                 {
-                    int threadIndex = i; // Aby uniknąć problemu zamknięcia pętli
+                    int threadIndex = i; // To avoid the closure loop issue
                     threads[i] = new Thread(
                     () =>
                     {
@@ -98,11 +98,11 @@ namespace AssemblyProject
                         max = end - start;
                         if (threadIndex == threadsNumber - 1)
                         {
-                            // Ostatni wątek obsługuje resztę
+                            // The last thread handles the remainder
                             end = rgbArrays.Length;
                         }
 
-                        // Przetwarzanie każdej funkcji w odpowiednim zakresie tablicy
+                        // Processing each function within the specific array range
                         for (int j = start; j < end; j++)
                         {
                             int[] newArray = new int[100];
@@ -117,7 +117,7 @@ namespace AssemblyProject
             }
             catch (Exception)
             {
-                // Obsługa wyjątków
+                // Exception handling
             }
         }   
 
@@ -129,7 +129,7 @@ namespace AssemblyProject
             {
                 for (int i = 0; i < threadsNumber; i++)
                 {
-                    int threadIndex = i; // Aby uniknąć problemu zamknięcia pętli
+                    int threadIndex = i; // To avoid the closure loop issue
                     threads[i] = new Thread(
                         () =>
                         {
@@ -138,11 +138,11 @@ namespace AssemblyProject
 
                             if (threadIndex == threadsNumber - 1)
                             {
-                                // Ostatni wątek obsługuje resztę
+                                // The last thread handles the remainder
                                 end = rgbArrays.Length;
                             }
 
-                            // Przetwarzanie każdej funkcji w odpowiednim zakresie tablicy
+                            // Processing each function within the specific array range
                             for (int j = start; j < end; j++)
                             {
                                 int[] newArray = new int[100];
@@ -157,7 +157,7 @@ namespace AssemblyProject
             }
             catch (Exception)
             {
-                // Obsługa wyjątków
+                // Exception handling
             }
         }
         public void PrepareGaussianBlurASM(int[][] rgbArrays, int threadsNumber)
@@ -168,7 +168,7 @@ namespace AssemblyProject
             {
                 for (int i = 0; i < threadsNumber; i++)
                 {
-                    int threadIndex = i; // Aby uniknąć problemu zamknięcia pętli
+                    int threadIndex = i; // To avoid the closure loop issue
                     threads[i] = new Thread(
                     () =>
                     {
@@ -178,11 +178,11 @@ namespace AssemblyProject
                         max = end - start;
                         if (threadIndex == threadsNumber - 1)
                         {
-                            // Ostatni wątek obsługuje resztę
+                            // The last thread handles the remainder
                             end = rgbArrays.Length;
                         }
 
-                        // Przetwarzanie każdej funkcji w odpowiednim zakresie tablicy
+                        // Processing each function within the specific array range
                         for (int j = start; j < end; j++)
                         {
                             int[] newArray = new int[100];
@@ -197,7 +197,7 @@ namespace AssemblyProject
             }
             catch (Exception)
             {
-                // Obsługa wyjątków
+                // Exception handling
             }
         }
 

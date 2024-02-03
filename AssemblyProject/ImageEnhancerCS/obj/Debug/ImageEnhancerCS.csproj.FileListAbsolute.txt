@@ -1,0 +1,6 @@
+C:\Users\mati\Documents\GitHub\ImageEnhancer\AssemblyProject\ImageEnhancerCS\bin\Debug\ImageEnhancerCS.dll
+C:\Users\mati\Documents\GitHub\ImageEnhancer\AssemblyProject\ImageEnhancerCS\bin\Debug\ImageEnhancerCS.pdb
+C:\Users\mati\Documents\GitHub\ImageEnhancer\AssemblyProject\ImageEnhancerCS\obj\Debug\ImageEnhancerCS.csproj.AssemblyReference.cache
+C:\Users\mati\Documents\GitHub\ImageEnhancer\AssemblyProject\ImageEnhancerCS\obj\Debug\ImageEnhancerCS.csproj.CoreCompileInputs.cache
+C:\Users\mati\Documents\GitHub\ImageEnhancer\AssemblyProject\ImageEnhancerCS\obj\Debug\ImageEnhancerCS.dll
+C:\Users\mati\Documents\GitHub\ImageEnhancer\AssemblyProject\ImageEnhancerCS\obj\Debug\ImageEnhancerCS.pdb

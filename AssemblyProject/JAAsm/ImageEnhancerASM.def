@@ -1,3 +1,3 @@
-LIBRARY JAAsm
+LIBRARY ImageEnhancerASM
 EXPORTS LaplacianFilterASM
 EXPORTS GaussianBlurASM

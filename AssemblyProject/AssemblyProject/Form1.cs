@@ -167,7 +167,7 @@ namespace AssemblyProject
         {
             if (image == null)
             {
-                MessageBox.Show("Brak obrazu do zapisania.");
+                MessageBox.Show("No image to save.");
                 return;
             }
 
@@ -185,7 +185,7 @@ namespace AssemblyProject
                 // Save image from bitmap as JPEG
                 image.Save(savePath, System.Drawing.Imaging.ImageFormat.Jpeg);
 
-                MessageBox.Show("Obraz został zapisany.");
+                MessageBox.Show("No image to save.");
             }
         }
     }

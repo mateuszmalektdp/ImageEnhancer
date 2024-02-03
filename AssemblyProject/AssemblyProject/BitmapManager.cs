@@ -111,7 +111,7 @@ namespace AssemblyProject
                     int targetY = rectY + y;
                     int targetX = rectX + x;
 
-                    // Dodajemy dodatkowe sprawdzenie, aby uniknąć przekroczenia zakresu tablicy
+                    // Adding an extra check to avoid exceeding the array bounds
                     if (targetY < height && targetX < width)
                     {
                         imageToArray[targetY * width + targetX] = rectToArray[y * rectSize + x];

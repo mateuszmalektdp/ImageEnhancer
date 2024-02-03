@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Drawing;
 
-namespace JACs
+namespace ImageEnhancerCS
 {
-    public class JACs
+    public class ImageEnhancerCS
     {
-        public JACs() { }
+        public ImageEnhancerCS() { }
 
         private const int ImageWidth = 10;
         private const int ImageHeight = 10;
