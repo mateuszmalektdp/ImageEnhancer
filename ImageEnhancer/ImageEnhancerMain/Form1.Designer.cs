@@ -48,6 +48,8 @@ namespace ImageEnhancerMain
             this.labelImageArea = new System.Windows.Forms.Label();
             this.buttonSave = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label4 = new System.Windows.Forms.Label();
+            this.labelLastExe = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarSquareArea)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numberOfThreads)).BeginInit();
@@ -168,11 +170,11 @@ namespace ImageEnhancerMain
             // ExecutionTime
             // 
             this.ExecutionTime.AutoSize = true;
-            this.ExecutionTime.Location = new System.Drawing.Point(97, 251);
+            this.ExecutionTime.Location = new System.Drawing.Point(107, 251);
             this.ExecutionTime.Name = "ExecutionTime";
-            this.ExecutionTime.Size = new System.Drawing.Size(13, 13);
+            this.ExecutionTime.Size = new System.Drawing.Size(27, 13);
             this.ExecutionTime.TabIndex = 5;
-            this.ExecutionTime.Text = "0";
+            this.ExecutionTime.Text = "0 μs";
             // 
             // label6
             // 
@@ -186,7 +188,7 @@ namespace ImageEnhancerMain
             // labelSquareArea
             // 
             this.labelSquareArea.AutoSize = true;
-            this.labelSquareArea.Location = new System.Drawing.Point(97, 226);
+            this.labelSquareArea.Location = new System.Drawing.Point(107, 226);
             this.labelSquareArea.Name = "labelSquareArea";
             this.labelSquareArea.Size = new System.Drawing.Size(24, 13);
             this.labelSquareArea.TabIndex = 14;
@@ -213,7 +215,7 @@ namespace ImageEnhancerMain
             // labelImageArea
             // 
             this.labelImageArea.AutoSize = true;
-            this.labelImageArea.Location = new System.Drawing.Point(97, 202);
+            this.labelImageArea.Location = new System.Drawing.Point(107, 202);
             this.labelImageArea.Name = "labelImageArea";
             this.labelImageArea.Size = new System.Drawing.Size(24, 13);
             this.labelImageArea.TabIndex = 16;
@@ -221,7 +223,7 @@ namespace ImageEnhancerMain
             // 
             // buttonSave
             // 
-            this.buttonSave.Location = new System.Drawing.Point(8, 290);
+            this.buttonSave.Location = new System.Drawing.Point(8, 311);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(151, 46);
             this.buttonSave.TabIndex = 17;
@@ -238,11 +240,31 @@ namespace ImageEnhancerMain
             this.panel1.Size = new System.Drawing.Size(1600, 900);
             this.panel1.TabIndex = 18;
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(8, 275);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(101, 13);
+            this.label4.TabIndex = 19;
+            this.label4.Text = "Last execution time:";
+            // 
+            // labelLastExe
+            // 
+            this.labelLastExe.AutoSize = true;
+            this.labelLastExe.Location = new System.Drawing.Point(107, 275);
+            this.labelLastExe.Name = "labelLastExe";
+            this.labelLastExe.Size = new System.Drawing.Size(27, 13);
+            this.labelLastExe.TabIndex = 20;
+            this.labelLastExe.Text = "0 μs";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1147, 545);
+            this.Controls.Add(this.labelLastExe);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.buttonSave);
             this.Controls.Add(this.labelImageArea);
@@ -292,6 +314,8 @@ namespace ImageEnhancerMain
         private Label labelImageArea;
         private Button buttonSave;
         private Panel panel1;
+        private Label label4;
+        private Label labelLastExe;
     }
 }
 

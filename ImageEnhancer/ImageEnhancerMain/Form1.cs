@@ -1,25 +1,17 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Threading;
 using System.Windows.Forms;
-using static System.Net.Mime.MediaTypeNames;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace ImageEnhancerMain
 {
     public partial class Form1 : Form
     {
-        Stopwatch stopwatch;
+        
         DLLManager dllManager;
         BitmapManager bitmapManager;
+        TimerManager timerManager;
         string fileToConvert;
         int[] imageToArray;
         int[] rectToArray;
@@ -31,7 +23,7 @@ namespace ImageEnhancerMain
             InitializeComponent();
             dllManager = new DLLManager();
             bitmapManager = new BitmapManager();
-            RunTimerFirstTime();
+            timerManager = new TimerManager();
         }
 
         private void buttonLoadImage_Click(object sender, EventArgs e)
@@ -53,36 +45,8 @@ namespace ImageEnhancerMain
                 labelMax.Text = Math.Min((image.Width - 2 )/ 64 * 64 + 2, (image.Height - 2)/ 64 * 64 + 2).ToString();
             }
         }
-        private void RunTimerFirstTime()
-        {
-            StartTimer();
-            StopTimer();
-            ExecutionTime.Text = "0";
-        }
-        public void StartTimer()
-        {
-            stopwatch = Stopwatch.StartNew();
-        }
+       
 
-        public void StopTimer()
-        {
-            stopwatch.Stop();
-            long ticks = stopwatch.ElapsedTicks;
-            if (ExecutionTime.Text.Split('\n').Length > 4)
-            {
-                string[] times = ExecutionTime.Text.Split('\n');
-                ExecutionTime.Text = times[0] + "\n" + times[1] + "\n" + times[2] + "\n" + times[3];
-            }
-
-            if (ExecutionTime.Text == "0")
-            {
-                ExecutionTime.Text = ticks.ToString();
-            }
-            else
-            {
-                ExecutionTime.Text = ticks.ToString() + "\n" + ExecutionTime.Text;
-            }
-        }
 
         private void pictureBox_Click(object sender, EventArgs e)
         {
@@ -125,30 +89,34 @@ namespace ImageEnhancerMain
             if (radioButtonASM.Checked && me.Button == MouseButtons.Left)
             {
                 dllManager.PrepareLaplacianFilterASM(splittedArray, (int)numberOfThreads.Value);
-                StartTimer();
+                timerManager.StartTimer();
                 dllManager.Run(splittedArray, (int)numberOfThreads.Value);
-                StopTimer();
+                labelLastExe.Text = ExecutionTime.Text;
+                ExecutionTime.Text = timerManager.StopTimer(ExecutionTime.Text);
             }
             else if (radioButtonC.Checked && me.Button == MouseButtons.Left)
             {
                 dllManager.PrepareLaplacianFilterCS(splittedArray, (int)numberOfThreads.Value);
-                StartTimer();
+                timerManager.StartTimer();
                 dllManager.Run(splittedArray, (int)numberOfThreads.Value);
-                StopTimer();
+                labelLastExe.Text = ExecutionTime.Text;
+                ExecutionTime.Text = timerManager.StopTimer(ExecutionTime.Text);
             }
             else if (radioButtonASM.Checked && me.Button == MouseButtons.Right)
             {
                 dllManager.PrepareGaussianBlurASM(splittedArray, (int)numberOfThreads.Value);
-                StartTimer();
+                timerManager.StartTimer();
                 dllManager.Run(splittedArray, (int)numberOfThreads.Value);
-                StopTimer();
+                labelLastExe.Text = ExecutionTime.Text;
+                ExecutionTime.Text = timerManager.StopTimer(ExecutionTime.Text);
             }
             else if (radioButtonC.Checked && me.Button == MouseButtons.Right)
             {
                 dllManager.PrepareGaussianBlurCS(splittedArray, (int)numberOfThreads.Value);
-                StartTimer();
+                timerManager.StartTimer();
                 dllManager.Run(splittedArray, (int)numberOfThreads.Value);
-                StopTimer();
+                labelLastExe.Text = ExecutionTime.Text;
+                ExecutionTime.Text = timerManager.StopTimer(ExecutionTime.Text);
             }
         }
 
