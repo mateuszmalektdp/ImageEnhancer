@@ -1,8 +1,9 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 
 namespace ImageEnhancerMain
 {
-    partial class Form1
+    partial class ImageEnhancerGUI
     {
         /// <summary>
         /// Wymagana zmienna projektanta.
@@ -35,7 +36,7 @@ namespace ImageEnhancerMain
             this.pictureBox = new System.Windows.Forms.PictureBox();
             this.trackBarSquareArea = new System.Windows.Forms.TrackBar();
             this.numberOfThreads = new System.Windows.Forms.NumericUpDown();
-            this.label1 = new System.Windows.Forms.Label();
+            this.labelThreads = new System.Windows.Forms.Label();
             this.labelMin = new System.Windows.Forms.Label();
             this.labelMax = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
@@ -103,7 +104,7 @@ namespace ImageEnhancerMain
             // 
             this.numberOfThreads.Location = new System.Drawing.Point(11, 80);
             this.numberOfThreads.Maximum = new decimal(new int[] {
-            64,
+            12,
             0,
             0,
             0});
@@ -121,14 +122,14 @@ namespace ImageEnhancerMain
             0,
             0});
             // 
-            // label1
+            // labelThreads
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(137, 82);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(98, 13);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "Number of Threads";
+            this.labelThreads.AutoSize = true;
+            this.labelThreads.Location = new System.Drawing.Point(137, 82);
+            this.labelThreads.Name = "labelThreads";
+            this.labelThreads.Size = new System.Drawing.Size(98, 13);
+            this.labelThreads.TabIndex = 5;
+            this.labelThreads.Text = "Number of Threads";
             // 
             // labelMin
             // 
@@ -277,7 +278,7 @@ namespace ImageEnhancerMain
             this.Controls.Add(this.labelMax);
             this.Controls.Add(this.labelMin);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.labelThreads);
             this.Controls.Add(this.numberOfThreads);
             this.Controls.Add(this.trackBarSquareArea);
             this.Controls.Add(this.radioButtonASM);
@@ -301,7 +302,7 @@ namespace ImageEnhancerMain
         private System.Windows.Forms.PictureBox pictureBox;
         private System.Windows.Forms.TrackBar trackBarSquareArea;
         private NumericUpDown numberOfThreads;
-        private Label label1;
+        private Label labelThreads;
         private Label labelMin;
         private Label labelMax;
         private Label label5;

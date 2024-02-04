@@ -4,9 +4,13 @@ using System.Drawing;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
+// Author: Mateusz Malek
+// Silesian University of Technology 2023/24
+// Assembly Project v1.0
+
 namespace ImageEnhancerMain
 {
-    public partial class Form1 : Form
+    public partial class ImageEnhancerGUI : Form
     {
         
         DLLManager dllManager;
@@ -18,12 +22,13 @@ namespace ImageEnhancerMain
         int[][] splittedArray;
         Bitmap image;
 
-        public Form1()
+        public ImageEnhancerGUI()
         {
             InitializeComponent();
             dllManager = new DLLManager();
             bitmapManager = new BitmapManager();
             timerManager = new TimerManager();
+            labelThreads.Text = "Number of Threads [max: " + Environment.ProcessorCount + "])";
         }
 
         private void buttonLoadImage_Click(object sender, EventArgs e)
@@ -50,7 +55,7 @@ namespace ImageEnhancerMain
 
         private void pictureBox_Click(object sender, EventArgs e)
         {
-            if  (trackBarSquareArea.Value != 0) { 
+            if  (trackBarSquareArea.Value != 0 && image != null) { 
                 MouseEventArgs me = (MouseEventArgs)e;
 
                 // Get the value from the slider
@@ -153,7 +158,7 @@ namespace ImageEnhancerMain
                 // Save image from bitmap as JPEG
                 image.Save(savePath, System.Drawing.Imaging.ImageFormat.Jpeg);
 
-                MessageBox.Show("No image to save.");
+                MessageBox.Show("Image has been saved.");
             }
         }
     }

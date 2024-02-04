@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Drawing;
 
+// Author: Mateusz Malek
+// Silesian University of Technology 2023/24
+// Assembly Project v1.0
+
 namespace ImageEnhancerCS
 {
     public class ImageEnhancerCS

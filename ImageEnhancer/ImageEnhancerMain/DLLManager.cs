@@ -10,6 +10,10 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
+// Author: Mateusz Malek
+// Silesian University of Technology 2023/24
+// Assembly Project v1.0
+
 namespace ImageEnhancerMain
 {
     internal class DLLManager
@@ -25,7 +29,7 @@ namespace ImageEnhancerMain
         public int max = 0;
         public DLLManager()
         {
-            threads = new Thread[64];
+            threads = new Thread[Environment.ProcessorCount];
         }
         
         public void PrepareLaplacianFilterCS(int[][] rgbArrays, int threadsNumber)

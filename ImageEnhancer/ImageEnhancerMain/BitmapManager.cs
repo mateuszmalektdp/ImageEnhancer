@@ -2,8 +2,13 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+
+// Author: Mateusz Malek
+// Silesian University of Technology 2023/24
+// Assembly Project v1.0
 
 namespace ImageEnhancerMain
 {

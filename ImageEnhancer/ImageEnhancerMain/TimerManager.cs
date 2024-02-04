@@ -5,6 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+// Author: Mateusz Malek
+// Silesian University of Technology 2023/24
+// Assembly Project v1.0
+
 namespace ImageEnhancerMain
 {
     internal class TimerManager

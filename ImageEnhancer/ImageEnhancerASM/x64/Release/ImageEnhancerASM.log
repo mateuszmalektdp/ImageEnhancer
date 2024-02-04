@@ -1,0 +1,5 @@
+﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: Katalog pośredni (x64\Release\) zawiera pliki udostępnione z innego projektu (JAAsm.vcxproj). Może to spowodować niepoprawne zachowanie podczas oczyszczania i ponownej kompilacji.
+  Assembling ImageEnhancerASM.asm...
+     Trwa tworzenie biblioteki C:\Users\mati\Documents\GitHub\ImageEnhancer\ImageEnhancer\x64\Release\ImageEnhancerASM.lib i obiektu C:\Users\mati\Documents\GitHub\ImageEnhancer\ImageEnhancer\x64\Release\ImageEnhancerASM.exp
+  LINK : określono opcję /LTCG, lecz generowanie kodu nie było wymagane; usuń opcję /LTCG z wiersza polecenia konsolidatora w celu podwyższenia wydajności konsolidatora
+  ImageEnhancerASM.vcxproj -> C:\Users\mati\Documents\GitHub\ImageEnhancer\ImageEnhancer\x64\Release\ImageEnhancerASM.dll

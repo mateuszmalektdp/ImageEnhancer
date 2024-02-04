@@ -1,0 +1,13 @@
+C:\Users\mati\Documents\GitHub\ImageEnhancer\ImageEnhancer\ImageEnhancerMain\bin\Release\ImageEnhancerMain.exe.config
+C:\Users\mati\Documents\GitHub\ImageEnhancer\ImageEnhancer\ImageEnhancerMain\bin\Release\ImageEnhancerMain.exe
+C:\Users\mati\Documents\GitHub\ImageEnhancer\ImageEnhancer\ImageEnhancerMain\bin\Release\ImageEnhancerMain.pdb
+C:\Users\mati\Documents\GitHub\ImageEnhancer\ImageEnhancer\ImageEnhancerMain\bin\Release\System.CodeDom.dll
+C:\Users\mati\Documents\GitHub\ImageEnhancer\ImageEnhancer\ImageEnhancerMain\bin\Release\System.CodeDom.xml
+C:\Users\mati\Documents\GitHub\ImageEnhancer\ImageEnhancer\ImageEnhancerMain\obj\Release\ImageEnhancerMain.csproj.AssemblyReference.cache
+C:\Users\mati\Documents\GitHub\ImageEnhancer\ImageEnhancer\ImageEnhancerMain\obj\Release\ImageEnhancerMain.Form1.resources
+C:\Users\mati\Documents\GitHub\ImageEnhancer\ImageEnhancer\ImageEnhancerMain\obj\Release\ImageEnhancerMain.Properties.Resources.resources
+C:\Users\mati\Documents\GitHub\ImageEnhancer\ImageEnhancer\ImageEnhancerMain\obj\Release\ImageEnhancerMain.csproj.GenerateResource.cache
+C:\Users\mati\Documents\GitHub\ImageEnhancer\ImageEnhancer\ImageEnhancerMain\obj\Release\ImageEnhancerMain.csproj.CoreCompileInputs.cache
+C:\Users\mati\Documents\GitHub\ImageEnhancer\ImageEnhancer\ImageEnhancerMain\obj\Release\ImageEnhancerMain.csproj.CopyComplete
+C:\Users\mati\Documents\GitHub\ImageEnhancer\ImageEnhancer\ImageEnhancerMain\obj\Release\ImageEnhancerMain.exe
+C:\Users\mati\Documents\GitHub\ImageEnhancer\ImageEnhancer\ImageEnhancerMain\obj\Release\ImageEnhancerMain.pdb
