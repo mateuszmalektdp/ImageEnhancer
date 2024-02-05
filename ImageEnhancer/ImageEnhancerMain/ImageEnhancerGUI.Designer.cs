@@ -51,6 +51,7 @@ namespace ImageEnhancerMain
             this.panel1 = new System.Windows.Forms.Panel();
             this.label4 = new System.Windows.Forms.Label();
             this.labelLastExe = new System.Windows.Forms.Label();
+            this.buttonHistogram = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarSquareArea)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numberOfThreads)).BeginInit();
@@ -259,11 +260,22 @@ namespace ImageEnhancerMain
             this.labelLastExe.TabIndex = 20;
             this.labelLastExe.Text = "0 μs";
             // 
-            // Form1
+            // buttonHistogram
+            // 
+            this.buttonHistogram.Location = new System.Drawing.Point(8, 392);
+            this.buttonHistogram.Name = "buttonHistogram";
+            this.buttonHistogram.Size = new System.Drawing.Size(151, 46);
+            this.buttonHistogram.TabIndex = 21;
+            this.buttonHistogram.Text = "Generate Histogram";
+            this.buttonHistogram.UseVisualStyleBackColor = true;
+            this.buttonHistogram.Click += new System.EventHandler(this.buttonHistogram_Click);
+            // 
+            // ImageEnhancerGUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1147, 545);
+            this.Controls.Add(this.buttonHistogram);
             this.Controls.Add(this.labelLastExe);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.panel1);
@@ -283,7 +295,7 @@ namespace ImageEnhancerMain
             this.Controls.Add(this.trackBarSquareArea);
             this.Controls.Add(this.radioButtonASM);
             this.Controls.Add(this.radioButtonC);
-            this.Name = "Form1";
+            this.Name = "ImageEnhancerGUI";
             this.Text = "Image Enhancer";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarSquareArea)).EndInit();
@@ -317,6 +329,7 @@ namespace ImageEnhancerMain
         private Panel panel1;
         private Label label4;
         private Label labelLastExe;
+        private Button buttonHistogram;
     }
 }
 

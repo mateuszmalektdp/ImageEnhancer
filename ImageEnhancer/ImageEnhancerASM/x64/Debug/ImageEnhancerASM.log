@@ -1,1 +1,3 @@
-﻿  ImageEnhancerASM.vcxproj -> C:\Users\mati\Documents\GitHub\ImageEnhancer\ImageEnhancer\x64\Debug\ImageEnhancerASM.dll
+﻿  Assembling ImageEnhancerASM.asm...
+     Trwa tworzenie biblioteki C:\Users\mati\Documents\GitHub\ImageEnhancer\ImageEnhancer\x64\Debug\ImageEnhancerASM.lib i obiektu C:\Users\mati\Documents\GitHub\ImageEnhancer\ImageEnhancer\x64\Debug\ImageEnhancerASM.exp
+  ImageEnhancerASM.vcxproj -> C:\Users\mati\Documents\GitHub\ImageEnhancer\ImageEnhancer\x64\Debug\ImageEnhancerASM.dll

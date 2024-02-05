@@ -33,6 +33,7 @@ namespace ImageEnhancerMain
 
         private void buttonLoadImage_Click(object sender, EventArgs e)
         {
+            try { 
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.CheckFileExists = true;
             openFileDialog.CheckPathExists = true;
@@ -48,6 +49,11 @@ namespace ImageEnhancerMain
                 labelImageArea.Text = image.Width + "x" + image.Height;
                 trackBarSquareArea.Maximum = Math.Min((image.Width-2) / 64, (image.Height-2) / 64);
                 labelMax.Text = Math.Min((image.Width - 2 )/ 64 * 64 + 2, (image.Height - 2)/ 64 * 64 + 2).ToString();
+            }
+            }
+            catch
+            {
+                MessageBox.Show("Incorrect file type.");
             }
         }
        
@@ -158,7 +164,20 @@ namespace ImageEnhancerMain
                 // Save image from bitmap as JPEG
                 image.Save(savePath, System.Drawing.Imaging.ImageFormat.Jpeg);
 
-                MessageBox.Show("Image has been saved.");
+                MessageBox.Show("No image loaded.");
+            }
+        }
+
+        private void buttonHistogram_Click(object sender, EventArgs e)
+        {
+            if(image != null) {
+            ImageChart chartForm = new ImageChart(image);
+            chartForm.Show(); // Pokaż formularz
+            chartForm.GenerateHistograms(image); // Generuj i wyświetlaj histogramy
+            }
+            else
+            { 
+                MessageBox.Show("No image loaded."); 
             }
         }
     }
