@@ -29,6 +29,7 @@ namespace ImageEnhancerMain
             bitmapManager = new BitmapManager();
             timerManager = new TimerManager();
             labelThreads.Text = "Number of Threads [max: " + Environment.ProcessorCount + "])";
+            numberOfThreads.Maximum = Environment.ProcessorCount;
         }
 
         private void buttonLoadImage_Click(object sender, EventArgs e)
@@ -146,7 +147,7 @@ namespace ImageEnhancerMain
         {
             if (image == null)
             {
-                MessageBox.Show("No image to save.");
+                MessageBox.Show("No image loaded.");
                 return;
             }
 
@@ -164,7 +165,7 @@ namespace ImageEnhancerMain
                 // Save image from bitmap as JPEG
                 image.Save(savePath, System.Drawing.Imaging.ImageFormat.Jpeg);
 
-                MessageBox.Show("No image loaded.");
+                MessageBox.Show("Image has been saved.");
             }
         }
 
