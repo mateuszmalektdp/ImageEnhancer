@@ -71,4 +71,3 @@ C:\Users\mati\Documents\GitHub\ImageEnhancer\ImageEnhancer\ImageEnhancerMain\bin
 C:\Users\mati\Documents\GitHub\ImageEnhancer\ImageEnhancer\ImageEnhancerMain\bin\x64\Debug\zh-cn\ZedGraph.resources.dll
 C:\Users\mati\Documents\GitHub\ImageEnhancer\ImageEnhancer\ImageEnhancerMain\bin\x64\Debug\zh-tw\ZedGraph.resources.dll
 C:\Users\mati\Documents\GitHub\ImageEnhancer\ImageEnhancer\ImageEnhancerMain\obj\x64\Debug\ImageEnhancerMain.ImageChart.resources
-C:\Users\mati\Documents\GitHub\ImageEnhancer\ImageEnhancer\ImageEnhancerMain\obj\x64\Debug\ImageEnhancerMain.csproj.SuggestedBindingRedirects.cache

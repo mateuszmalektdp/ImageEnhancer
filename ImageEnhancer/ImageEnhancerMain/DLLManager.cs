@@ -18,12 +18,14 @@ namespace ImageEnhancerMain
 {
     internal class DLLManager
     {
-        // Assembly DLL load for GaussianBlur and LaplacianFilter operations
-        [DllImport(@"..\\..\\..\\..\\x64\\Debug\\ImageEnhancerASM.dll")]
+        // Assembly DLL load for LaplacianFilter and GaussianBlur operations
+
+        [DllImport(@"..\..\..\..\x64\Debug\ImageEnhancerASM.dll")]
+        public static extern unsafe void LaplacianFilterASM(int[] rgbArray, int[] newArray, int startPosition, int endPosition);
+
+        [DllImport(@"..\..\..\..\x64\Debug\ImageEnhancerASM.dll")]
         public static extern unsafe void GaussianBlurASM(int[] rgbArray, int[] newArray, int startPosition, int endPosition);
 
-        [DllImport(@"..\\..\\..\\..\\x64\\Debug\\ImageEnhancerASM.dll")]
-        public static extern unsafe void LaplacianFilterASM(int[] rgbArray, int[] newArray, int startPosition, int endPosition);
         Thread[] threads;
         object[] dllResult;
         public int max = 0;
