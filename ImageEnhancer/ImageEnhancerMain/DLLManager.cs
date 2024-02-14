@@ -20,10 +20,10 @@ namespace ImageEnhancerMain
     {
         // Assembly DLL load for LaplacianFilter and GaussianBlur operations
 
-        [DllImport(@"..\..\..\..\x64\Debug\ImageEnhancerASM.dll")]
+        [DllImport(@"..\..\..\..\x64\Release\ImageEnhancerASM.dll")]
         public static extern unsafe void LaplacianFilterASM(int[] rgbArray, int[] newArray, int startPosition, int endPosition);
 
-        [DllImport(@"..\..\..\..\x64\Debug\ImageEnhancerASM.dll")]
+        [DllImport(@"..\..\..\..\x64\Release\ImageEnhancerASM.dll")]
         public static extern unsafe void GaussianBlurASM(int[] rgbArray, int[] newArray, int startPosition, int endPosition);
 
         Thread[] threads;
@@ -36,7 +36,7 @@ namespace ImageEnhancerMain
         
         public void PrepareLaplacianFilterCS(int[][] rgbArrays, int threadsNumber)
         {
-            string path = @"..\..\..\..\ImageEnhancerCS\bin\Debug\ImageEnhancerCS.dll";
+            string path = @"..\..\..\..\ImageEnhancerCS\bin\Release\ImageEnhancerCS.dll";
             var assembly = Assembly.LoadFrom(path);
             var type = assembly.GetType("ImageEnhancerCS.ImageEnhancerCS");
             var activator = Activator.CreateInstance(type);
@@ -83,7 +83,7 @@ namespace ImageEnhancerMain
 
         public void PrepareGaussianBlurCS(int[][] rgbArrays, int threadsNumber)
         {
-            string path = @"..\..\..\..\ImageEnhancerCS\bin\Debug\ImageEnhancerCS.dll";
+            string path = @"..\..\..\..\ImageEnhancerCS\bin\Release\ImageEnhancerCS.dll";
             var assembly = Assembly.LoadFrom(path);
             var type = assembly.GetType("ImageEnhancerCS.ImageEnhancerCS");
             var activator = Activator.CreateInstance(type);
