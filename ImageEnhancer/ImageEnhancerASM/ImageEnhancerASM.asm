@@ -1,12 +1,57 @@
 .data
 
+; =====================================================================================
 ; Author: Mateusz Malek
-; Silesian University of Technology 2023/24
-; Assembly Project v1.0
+; Institution: Silesian University of Technology
+; Academic Year: 2023/24
+; Project: Assembly Project v1.0
+; =====================================================================================
+;
+; Section Overview:
+; The data section is organized into three distinct categories, each serving a specific 
+; purpose in image processing tasks. These categories include masks for the Laplacian 
+; filter, masks for the Gaussian filter, and masks for channel extraction. Each category 
+; is designed to aid in various aspects of image enhancement and analysis, from edge 
+; detection to blurring and noise reduction, and finally, color channel isolation.
+;
+; -------------------------------------------------------------------------------------
+; 1. Laplacian Filter Masks:
+; Used for edge detection by emphasizing areas of rapid intensity change in the image.
+;
+    minus   dd -0.5, -0.5, -0.5, -0.5   ; Weights for the surrounding pixels in Laplacian filter
+    laplace dd 5.0, 5.0, 5.0, 5.0       ; Weight for the center pixel in Laplacian filter
+;
+; -------------------------------------------------------------------------------------
+; 2. Gaussian Filter Masks:
+; Employed for blurring and noise reduction, these masks help in reducing detail 
+; and noise by averaging pixel values.
+;
+    corner  dd 1.0, 1.0, 1.0, 1.0       ; Gaussian weight for corner pixels
+    edge    dd 2.0, 2.0, 2.0, 2.0       ; Gaussian weight for edge/cross pixels
+    center  dd 4.0, 4.0, 4.0, 4.0       ; Gaussian weight for the center pixel
+    divide  dd 16.0, 16.0, 16.0, 16.0   ; Division factor for Gaussian filter normalization
+;
+; -------------------------------------------------------------------------------------
+; 3. Channel Extraction:
+; These masks are utilized for isolating specific color channels (Red, Green, Blue) 
+; from an image, enabling channel-specific processing.
+;
+    redMask   dd 00FF0000h              ; Mask for extracting the red channel
+    greenMask dd 0000FF00h              ; Mask for extracting the green channel
+    blueMask  dd 000000FFh              ; Mask for extracting the blue channel
+;
+; =====================================================================================
+
+
+.code
+
+; =====================================================================================
 ;
 ; Usage of the function:
 ; The function expects four parameters in the following format:
 ; (int[] oldArray, 10, 89, int[] newArray)
+;
+; -------------------------------------------------------------------------------------
 ;
 ; Parameters:
 ; RCX - oldArray:         An array of integers representing pixel data for a 10x10 square. Each integer
@@ -22,6 +67,8 @@
 ; R9  - endValue (89):    An integer representing the end index for processing, avoiding the last
 ;                         row and column of the 10x10 square (edges).
 ;
+; -------------------------------------------------------------------------------------
+;
 ; Description:
 ; The function processes a 10x10 square of pixel data from oldArray, avoiding the edges
 ; by starting at index 10 and ending at index 89. This ensures that the outermost pixels
@@ -31,25 +78,35 @@
 ; same as in oldArray (EE-RR-GG-BB). The use of newArray allows for the original edge pixels
 ; to remain unchanged while the inner pixels are processed and modified.
 ;
+; -------------------------------------------------------------------------------------
+;
 ; Initialized values:
-;  - pointer to first element of the array
+; RCX - pointer to first element of the array
 ; RDX - empty array to fill     
 ; R8  - start of the array       
 ; R9  - end of the array
-
-    minus   dd -0.5, -0.5, -0.5, -0.5   ; Weight of the surrounding pixels (laplace)
-    laplace dd 5.0, 5.0, 5.0, 5.0       ; Weight of the center (laplace)
-
-    corner  dd 1.0, 1.0, 1.0, 1.0       ; Weight of the corner (gauss)
-    diag    dd 2.0, 2.0, 2.0, 2.0       ; Weight of the diagonal (gauss)
-    center  dd 4.0, 4.0, 4.0, 4.0       ; Weight of the center (gauss)
-    divide  dd 16.0, 16.0, 16.0, 16.0   ; Weight of the division (gauss)
-
-    redMask   dd 00FF0000h              ; Value of the red channel
-    greenMask dd 0000FF00h              ; Value of the green channel
-    blueMask  dd 000000FFh              ; Value of the blue channel
-
-.code
+;
+; -------------------------------------------------------------------------------------
+;
+; Returned value:
+; The function modifies the newArray, which is passed as a parameter through the RDX register.
+; The newArray will contain the modified pixel data after the function execution.
+; Procedure returns 0 if completed succesfully
+;
+; -------------------------------------------------------------------------------------
+;
+; Registers used:
+; RCX - Pointer to the oldArray (input pixel data)
+; RDX - Pointer to the newArray (where the modified pixel data will be stored)
+; R8  - Start index for processing, used to navigate the processing window within the oldArray
+; R9  - End index for processing, used to determine the stop condition for the processing loop
+; RSI - Used as a row counter to navigate through the oldArray
+; RBX - Temporary register for calculations related to array indexing
+; R10, R11, R12 - Temporary registers for channel extraction and processing
+; RAX - Used for intermediate storage of pixel data during processing
+; XMM0 to XMM3, XMM9 - SSE registers used for processing pixel values (floating-point operations)
+;
+; =====================================================================================
 
 LaplacianFilterASM proc
 
@@ -156,6 +213,69 @@ processPixel:
 
 LaplacianFilterASM endp
 
+; =====================================================================================
+;
+; Usage of the function:
+; The function expects four parameters in the following format:
+; (int[] oldArray, 10, 89, int[] newArray)
+;
+; -------------------------------------------------------------------------------------
+;
+; Parameters:
+; RCX - oldArray:         An array of integers representing pixel data for a 10x10 square. Each integer
+;                         is in the format EE-RR-GG-BB, where E = empty (unused bits), R = red, G = green,
+;                         B = blue. This array represents the original pixel data before any processing.
+;
+; RDX - newArray:         An array of integers that will store the modified pixel data after processing.
+;                         This array should be initialized with the same size as oldArray.
+;
+; R8  - startValue (10):  An integer representing the start index for processing, avoiding the
+;                         first row and column of the 10x10 square (edges).
+;
+; R9  - endValue (89):    An integer representing the end index for processing, avoiding the last
+;                         row and column of the 10x10 square (edges).
+;
+; -------------------------------------------------------------------------------------
+;
+; Description:
+; The function processes a 10x10 square of pixel data from oldArray, avoiding the edges
+; by starting at index 10 and ending at index 89. This ensures that the outermost pixels
+; (edges) are not processed. The modifications are applied to newArray, where the initial
+; content is a copy of oldArray. This initial setup ensures that the unmodified edge pixels
+; from oldArray are preserved in newArray. The format of pixel data in newArray remains the
+; same as in oldArray (EE-RR-GG-BB). The use of newArray allows for the original edge pixels
+; to remain unchanged while the inner pixels are processed and modified.
+;
+; -------------------------------------------------------------------------------------
+;
+; Initialized values:
+; RCX - pointer to first element of the array
+; RDX - empty array to fill     
+; R8  - start of the array       
+; R9  - end of the array
+;
+; -------------------------------------------------------------------------------------
+;
+; Returned value:
+; The function modifies the newArray, which is passed as a parameter through the RDX register.
+; The newArray will contain the modified pixel data after the function execution.
+; Procedure returns 0 if completed succesfully
+;
+; -------------------------------------------------------------------------------------
+;
+; Registers used:
+; RCX - Pointer to the oldArray (input pixel data)
+; RDX - Pointer to the newArray (where the modified pixel data will be stored)
+; R8  - Start index for processing, used to navigate the processing window within the oldArray
+; R9  - End index for processing, used to determine the stop condition for the processing loop
+; RSI - Used as a row counter to navigate through the oldArray
+; RBX - Temporary register for calculations related to array indexing
+; R10, R11, R12 - Temporary registers for channel extraction and processing
+; RAX - Used for intermediate storage of pixel data during processing
+; XMM0 to XMM3, XMM9 - SSE registers used for processing pixel values (floating-point operations)
+;
+; =====================================================================================
+
 GaussianBlurASM proc
 
     mov RSI, 19                         ; Initialize row counter (end of the second row)
@@ -175,7 +295,7 @@ startLoop:
     call processPixel                   ; Call process func [- - -]
 
     mov eax, dword ptr [RCX - 32]       ; Upper edge        [- X -]
-    movups xmm9, dword ptr [diag]       ; Load weight       [- - -]
+    movups xmm9, dword ptr [edge]       ; Load weight       [- - -]
     call processPixel                   ; Call process func [- - -]
 
     mov eax, dword ptr [RCX - 28]       ; Right upper edge  [- - X]
@@ -183,7 +303,7 @@ startLoop:
     call processPixel                   ; Call process func [- - -]
 
     mov eax, dword ptr [RCX - 4]        ; Left edge         [- - -]
-    movups xmm9, dword ptr [diag]       ; Load weight       [X - -]
+    movups xmm9, dword ptr [edge]       ; Load weight       [X - -]
     call processPixel                   ; Call process func [- - -]
 
     mov eax, dword ptr [RCX]            ; Center            [- - -]
@@ -191,7 +311,7 @@ startLoop:
     call processPixel                   ; Call process func [- - -]
 
     mov eax, dword ptr [RCX + 4]        ; Right edge        [- - -]
-    movups xmm9, dword ptr [diag]       ; Load weight       [- - X]
+    movups xmm9, dword ptr [edge]       ; Load weight       [- - X]
     call processPixel                   ; Call process func [- - -]
 
     mov eax, dword ptr [RCX + 28]       ; Left lower edge   [- - -]
@@ -199,7 +319,7 @@ startLoop:
     call processPixel                   ; Call process func [X - -]
 
     mov eax, dword ptr [RCX + 32]       ; Lower edge        [- - -]
-    movups xmm9, dword ptr [diag]       ; Load weight       [- - -]
+    movups xmm9, dword ptr [edge]       ; Load weight       [- - -]
     call processPixel                   ; Call process func [- X -]
 
     mov eax, dword ptr [RCX + 36]       ; Right lower edge  [- - -]
